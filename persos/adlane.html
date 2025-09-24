@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <title>Présentation Walid</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,7 +14,7 @@
       justify-content: center; 
       align-items: center;
       gap: 40px; 
-       
+      flex-wrap: wrap;
     }
 
     .container img {
@@ -30,14 +28,10 @@
     .texte {
       width: 200px; 
       text-align: justify;
-
     }
 
-
-.icone-retour {
+    .icone-retour, .icone-muscle {
       position: fixed;
-      top: 15px;
-      left: 15px;
       font-size: 30px;
       text-decoration: none;
       cursor: pointer;
@@ -45,44 +39,52 @@
       z-index: 1000;
     }
 
-    .icone-retour:hover {
-      transform: scale(1.2);
+    .icone-retour {
+      top: 15px;
+      left: 15px;
     }
 
+    .icone-muscle {
+      bottom: 15px;
+      right: 15px;
+      font-size: 40px; /* taille de départ */
+    }
 
-
-
-
+    .icone-retour:hover, .icone-muscle:hover {
+      transform: scale(1.2);
+    }
   </style>
 </head>
-
 <body>
-<a href="../index.html" class="icone-retour">🛡️</a>
-
+  <!-- Icône de retour -->
+  <a href="../index.html" class="icone-retour">🛡️</a>
 
   <div class="container">
     <div class="texte">
-      <h2>Déscription</h2>
-      <p>
-     un jeune aventurier en quête d'histoire à raconter 
-      </p>
+      <h2>Description</h2>
+      <p>Muscle</p>
     </div>
 
-    <img src="../adlane.jpg" alt="Walid" />
+    <img src="../adlane.jpg" alt="Photo de Walid" />
 
     <div class="texte">
-      <h2>difficulté:</h2>
-       
-    <p style="font-size: 24px;">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐</p>
-
-
+      <h2>Difficulté</h2>
+      <p style="font-size: 24px;">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐</p>
     </div>
   </div>
 
+  <!-- Icône muscle -->
+  <span class="icone-muscle" id="muscle">💪</span>
 
+  <script>
+    const muscle = document.getElementById("muscle");
+    let taille = 40; // taille initiale en pixels
 
-
-
+    muscle.addEventListener("click", () => {
+      taille += 10; // augmente la taille de 10px à chaque clic
+      muscle.style.fontSize = taille + "px";
+    });
+  </script>
 </body>
 </html>
 
