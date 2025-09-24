@@ -15,7 +15,6 @@
       justify-content: center; 
       align-items: center;
       gap: 40px; 
-       
     }
 
     .container img {
@@ -29,10 +28,9 @@
     .texte {
       width: 200px; 
       text-align: justify;
-
     }
 
-.icone-retour {
+    .icone-retour {
       position: fixed;
       top: 15px;
       left: 15px;
@@ -47,14 +45,73 @@
       transform: scale(1.2);
     }
 
+  
+    .stars {
+      font-size: 24px;
+      display: inline-block;
+  
+    }
 
+    .star {
+      display: inline-block;
+      position: relative;
+      font-size: 28px;     
+      margin-right: 6px;
+      cursor: default;
+      user-select: none;
+      line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
 
+ 
+    .star::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      bottom: 130%;
+      white-space: nowrap;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease, transform .15s ease;
+      z-index: 999;
+    }
 
+   
+    .star::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 115%;
+      border-width: 6px;
+      border-style: solid;
+      border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+      opacity: 0;
+      transition: opacity .15s ease;
+      z-index: 998;
+    }
 
+ 
+    .star:hover::after,
+    .star:focus::after,
+    .star:hover::before,
+    .star:focus::before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
-
-
-
+ 
+    .star:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,120,215,0.15);
+      border-radius: 4px;
+    }
   </style>
 </head>
 
@@ -64,27 +121,24 @@
 
   <div class="container">
     <div class="texte">
-      <h2>Déscription</h2>
+      <h2>Description</h2>
       <p>
-     sorcier lisant des runes mystiques,  parlant une langue incompréhensible
+        sorcier lisant des runes mystiques, parlant une langue incompréhensible
       </p>
     </div>
 
     <img src="../raouf.jpg" alt="Raouf" />
 
     <div class="texte">
-      <h2>difficulté:</h2>
-       
-    <p style="font-size: 24px;">⭐⭐</p>
+      <h2>Difficulté:</h2>
 
+      <p class="stars" style="font-size: 24px;">
+        <span class="star" data-tooltip="salut" tabindex="0" aria-label="étoile 1">★</span>
+        <span class="star" data-tooltip="salut" tabindex="0" aria-label="étoile 2">★</span>
+      </p>
 
     </div>
   </div>
 
-
-
-
-
 </body>
 </html>
-
