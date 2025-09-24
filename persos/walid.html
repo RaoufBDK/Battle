@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Présentation Walid — Faux CAPTCHA</title>
+  <title>Présentation Walid — Walidfare</title>
   <style>
     :root{ --bg:#fff; --text:#222; --accent:#0b74ff; }
     html,body{ height:100%; margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
@@ -16,117 +16,47 @@
       gap: 40px; 
     }
 
-    .container img {
-      width: 250px;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 9px 12px rgba(0,0,0,0.4);
-    }
-
-    .texte {
-      width: 200px; 
-      text-align: justify;
-    }
-
-    .icone-retour {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      font-size: 30px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      z-index: 1000;
-    }
-
+    .container img { width: 250px; height: 400px; object-fit: cover; border-radius: 10px; box-shadow: 0 9px 12px rgba(0,0,0,0.4); }
+    .texte { width: 200px; text-align: justify; }
+    .icone-retour { position: fixed; top: 15px; left: 15px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
     .icone-retour:hover { transform: scale(1.2); }
 
-   
-    .captcha-wrap{
-      max-width: 760px;
-      margin: 30px auto 0;
-      display:flex;
-      gap:28px;
-      align-items:center;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
+    /* Walidfare carousel */
+    .walidfare-section{ max-width:980px; margin:36px auto; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
+    .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .wf-title{ font-size:20px; font-weight:900; }
+    .wf-controls{ display:flex; gap:8px; align-items:center; }
+    .wf-btn{ padding:8px 12px; border-radius:8px; border:none; background:var(--accent); color:#fff; cursor:pointer; font-weight:800; }
+    .wf-nav{ display:flex; gap:8px; align-items:center; }
+    .wf-slide{ display:none; padding:18px; margin-top:16px; }
+    .wf-slide.active{ display:block; }
+    .wf-nav-btn{ padding:8px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:#fff; cursor:pointer; }
+    .wf-indicators{ display:flex; gap:6px; margin-left:8px; }
+    .wf-dot{ width:10px; height:10px; border-radius:50%; background:#ddd; }
+    .wf-dot.active{ background:var(--accent); box-shadow:0 4px 10px rgba(11,116,255,0.18); }
 
-    .game-area{
-      width: 360px;
-      height: 360px;
-      position: relative;
-      border-radius: 50%;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-      overflow: visible;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      grid-template-rows:1fr 1fr;
-      transition: transform 350ms ease;
-    }
-
-    .segment{
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      user-select:none;
-      transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease;
-      font-weight:700;
-      color:rgba(255,255,255,0.95);
-      font-family:inherit;
-      font-size:18px;
-    }
-
-    .segment::after{ content:''; position:absolute; inset:0; border-radius:0; }
-
+    /* reuse Simon game styles inside slide */
+    .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow: 0 12px 30px rgba(0,0,0,0.18); overflow: visible; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
+    .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-family:inherit; font-size:18px; }
     .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
     .seg-1{ background: #e74c3c; border-top-right-radius: 100% 100%; }
     .seg-2{ background: #f1c40f; border-bottom-left-radius: 100% 100%; }
     .seg-3{ background: #3498db; border-bottom-right-radius: 100% 100%; }
-
-    
-    .seg-0, .seg-1, .seg-2, .seg-3{
-      clip-path: polygon(50% 50%, 0% 0%, 100% 0%, 100% 100%, 0% 100%);
-    }
-
-    .segment.active{
-      filter: brightness(1.38) saturate(1.1);
-      transform: scale(1.04);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.28);
-    }
-
-    .center-hole{
-      position:absolute;
-      width:140px;height:140px;
-      left:50%;top:50%;transform:translate(-50%,-50%);
-      background: #111; color:#fff; border-radius:50%;
-      display:flex;align-items:center;justify-content:center;flex-direction:column;padding:10px;box-shadow:0 8px 20px rgba(0,0,0,0.25);
-    }
-
+    .segment.active{ filter: brightness(1.38) saturate(1.1); transform: scale(1.04); box-shadow: 0 14px 28px rgba(0,0,0,0.28); }
+    .center-hole{ position:absolute; width:120px;height:120px; left:50%;top:50%;transform:translate(-50%,-50%); background: #111; color:#fff; border-radius:50%; display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px;box-shadow:0 8px 20px rgba(0,0,0,0.25); }
     .controls{ display:flex; flex-direction:column; gap:8px; align-items:center; }
-    .controls .btn{ padding:10px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
+    .controls .btn{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
     .start-btn{ background: var(--accent); color:#fff; }
     .reset-btn{ background:#444; color:#fff; }
-
-    .info{ font-size:14px; text-align:center; }
-
-    .status{ margin-top:10px; font-weight:800; }
-
-    
+    .status{ margin-top:8px; font-weight:800; }
     .rotate-anim{ animation: spin 2.6s linear infinite; }
     @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
 
- 
-    .message{ margin-top:12px; font-weight:800; color:#222; }
+    /* placeholder styles for upcoming Walidfares */
+    .placeholder{ min-height:280px; display:flex; align-items:center; justify-content:center; gap:18px; flex-direction:column; color:#333; }
+    .kbd{ font-weight:900; background:#111; color:#fff; padding:6px 10px; border-radius:6px; }
 
-  
-    @media (max-width:700px){
-      .container{ flex-direction:column; gap:16px; }
-      .captcha-wrap{ gap:14px; }
-    }
+    @media (max-width:900px){ .walidfare-section{ padding:12px; } }
   </style>
 </head>
 <body>
@@ -146,209 +76,137 @@
     </div>
   </div>
 
-
-  <div class="captcha-wrap" aria-live="polite">
-    <div class="game-area" id="gameArea" role="application" aria-label="Faux captcha de mémorisation">
-      <div class="segment seg-0" data-index="0" aria-label="couleur 1" tabindex="0">1</div>
-      <div class="segment seg-1" data-index="1" aria-label="couleur 2" tabindex="0">2</div>
-      <div class="segment seg-2" data-index="2" aria-label="couleur 3" tabindex="0">3</div>
-      <div class="segment seg-3" data-index="3" aria-label="couleur 4" tabindex="0">4</div>
-
-      <div class="center-hole">
-        <div class="controls">
-          <button id="startBtn" class="btn start-btn">Démarrer le faux CAPTCHA</button>
-          <button id="resetBtn" class="btn reset-btn">Réinitialiser</button>
+  <!-- WALIDFARE SECTION (carousel of multiple mini-captchas / games) -->
+  <section class="walidfare-section" aria-label="Walidfare — mini jeux">
+    <div class="wf-header">
+      <div class="wf-title">Walidfare — Choisis un mini-jeu</div>
+      <div class="wf-controls">
+        <div class="wf-nav">
+          <button id="prevSlide" class="wf-nav-btn" aria-label="Précédent">◀</button>
+          <button id="nextSlide" class="wf-nav-btn" aria-label="Suivant">▶</button>
+          <div class="wf-indicators" id="wfIndicators"></div>
         </div>
-        <div class="info">Étapes: <span id="stepDisplay">—</span> / 7</div>
-        <div class="status" id="status">Prêt</div>
+        <div style="margin-left:12px; font-size:13px; color:#444;">Utilise aussi les flèches ← et → du clavier</div>
       </div>
     </div>
 
-    <div style="max-width:320px;">
-      <h3>Mode d'emploi</h3>
-      <p>Observe la séquence de flashes (accompagnés de bips) puis reproduis-la en cliquant sur les segments dans le même ordre. Le jeu fait 7 étapes et devient de plus en plus rapide. À la 5ᵉ étape le cercle tourne pendant la lecture.</p>
-      <div class="message" id="message"></div>
+    <!-- Slide 1 : Simon-like (Walidfare 1) -->
+    <div id="wf1" class="wf-slide active" data-index="0">
+      <h3>Walidfare 1 — Simon-like</h3>
+      <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes. (Démarrer ci-dessous)</p>
+
+      <div style="display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;">
+        <!-- Simon game area (copied and scoped) -->
+        <div>
+          <div class="game-area" id="gameArea1" role="application" aria-label="Walidfare 1 Simon">
+            <div class="segment seg-0" data-index="0" tabindex="0">1</div>
+            <div class="segment seg-1" data-index="1" tabindex="0">2</div>
+            <div class="segment seg-2" data-index="2" tabindex="0">3</div>
+            <div class="segment seg-3" data-index="3" tabindex="0">4</div>
+            <div class="center-hole">
+              <div class="controls">
+                <button id="startBtn1" class="btn start-btn">Démarrer</button>
+                <button id="resetBtn1" class="btn reset-btn">Réinitialiser</button>
+              </div>
+              <div class="info">Étapes: <span id="stepDisplay1">—</span> / 7</div>
+              <div class="status" id="status1">Prêt</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
+
+    <!-- Slide 2 : Stack boxes (placeholder for Walidfare 2) -->
+    <div id="wf2" class="wf-slide" data-index="1">
+      <h3>Walidfare 2 — Empiler les boîtes (à venir)</h3>
+      <div class="placeholder">
+        <div>Mini-jeu attendu: un chevalier (loubia) doit empiler 5 boîtes avec physiques, les maintenir 10s sans qu'elles tombent.</div>
+        <div>Contrôle: glisser-déposer les boîtes avec la souris. Physique et contraintes à implémenter.</div>
+        <div class="kbd">Prévisualisation: zone de jeu (sera interactive)</div>
+      </div>
+    </div>
+
+    <!-- Slide 3 : Piano replication (placeholder for Walidfare 3) -->
+    <div id="wf3" class="wf-slide" data-index="2">
+      <h3>Walidfare 3 — Piano répète une mélodie (à venir)</h3>
+      <div class="placeholder">
+        <div>Mini-jeu attendu: utiliser les touches QWERTYUIOP (ou affichage piano) pour répéter un morceau.</div>
+        <div>Trois choix de morceaux: 1) Smash Mouth – All Star (début) 2) Rick Astley – Never Gonna Give You Up (passage) 3) On m'appelle l'ovni (refrain).</div>
+        <div class="kbd">Prévisualisation: touches cliquables et zone son</div>
+      </div>
+    </div>
+
+  </section>
 
   <script>
+  // WALIDFARE carousel logic + initialize Walidfare 1 (simon) as before
   (function(){
+    // Carousel
+    const slides = Array.from(document.querySelectorAll('.wf-slide'));
+    const indicators = document.getElementById('wfIndicators');
+    let current = 0;
+
+    function renderIndicators(){
+      indicators.innerHTML = '';
+      slides.forEach((s,i)=>{
+        const dot = document.createElement('div'); dot.className='wf-dot'+(i===current? ' active':''); indicators.appendChild(dot);
+      });
+    }
+
+    function showSlide(index){
+      if(index < 0) index = slides.length -1;
+      if(index >= slides.length) index = 0;
+      slides.forEach(s=> s.classList.remove('active'));
+      slides[index].classList.add('active');
+      current = index; renderIndicators();
+    }
+
+    document.getElementById('prevSlide').addEventListener('click', ()=> showSlide(current-1));
+    document.getElementById('nextSlide').addEventListener('click', ()=> showSlide(current+1));
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowLeft') showSlide(current-1);
+      if(e.key === 'ArrowRight') showSlide(current+1);
+    });
+
+    renderIndicators(); showSlide(0);
+
+    /* ----------------- Walidfare 1 (Simon) implementation (scoped ids) ----------------- */
     const TOTAL_STEPS = 7;
-    const gameArea = document.getElementById('gameArea');
-    const segments = Array.from(document.querySelectorAll('.segment'));
-    const startBtn = document.getElementById('startBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const stepDisplay = document.getElementById('stepDisplay');
-    const status = document.getElementById('status');
-    const message = document.getElementById('message');
+    const gameArea = document.getElementById('gameArea1');
+    const segments = Array.from(gameArea.querySelectorAll('.segment'));
+    const startBtn = document.getElementById('startBtn1');
+    const resetBtn = document.getElementById('resetBtn1');
+    const stepDisplay = document.getElementById('stepDisplay1');
+    const status = document.getElementById('status1');
 
     let sequence = [];
     let playerIndex = 0;
-    let currentStep = 0; 
+    let currentStep = 0;
     let playingBack = false;
     let audioCtx = null;
-
-    
     const freqs = [261.6, 329.6, 392.0, 523.3];
 
-    function ensureAudio(){
-      if(!audioCtx){
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
+    function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } }
+    function beep(freq, duration=220){ ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination); g.gain.value = 0.0001; o.start(); g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02); setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 50); }, duration); }
+    function randSeq(len){ const arr=[]; for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4)); return arr; }
+    function highlight(index, ms){ const el = segments[index]; el.classList.add('active'); beep(freqs[index], Math.max(120, ms-40)); setTimeout(()=> el.classList.remove('active'), ms); }
 
-    function beep(freq, duration=220){
-      ensureAudio();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = freq;
-      o.connect(g);
-      g.connect(audioCtx.destination);
-      g.gain.value = 0.0001;
-      o.start();
-      
-      g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02);
-    
-      setTimeout(()=>{
-        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02);
-        setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 50);
-      }, duration);
-    }
+    function playback(step){ playingBack = true; playerIndex = 0; status.textContent = 'Écoute...'; if(step >=5) gameArea.classList.add('rotate-anim'); else gameArea.classList.remove('rotate-anim'); const base = Math.max(320, 700 - (step-1)*60); let delay = 400; for(let i=0;i<step;i++){ const idx = sequence[i]; setTimeout(((index, ms)=>()=> highlight(index, ms))(idx, base), delay); delay += base + 160; } setTimeout(()=>{ playingBack = false; gameArea.classList.remove('rotate-anim'); status.textContent = 'À toi'; }, delay + 60); }
 
-    function randSeq(len){
-      const arr = [];
-      for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4));
-      return arr;
-    }
+    function startGame(){ sequence = randSeq(TOTAL_STEPS); currentStep = 1; stepDisplay.textContent = currentStep; status.textContent = 'Prépare...'; ensureAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); setTimeout(()=> playback(currentStep), 350); }
+    function resetGame(){ sequence = []; currentStep = 0; playerIndex = 0; playingBack = false; stepDisplay.textContent = '—'; status.textContent = 'Réinitialisé'; gameArea.classList.remove('rotate-anim'); }
 
-    function highlight(index, ms){
-      const el = segments[index];
-      el.classList.add('active');
-      beep(freqs[index], Math.max(120, ms-40));
-      setTimeout(()=> el.classList.remove('active'), ms);
-    }
+    function handlePlayerClick(index){ if(playingBack) return; if(currentStep === 0) return; highlight(index, 180); if(index === sequence[playerIndex]){ playerIndex += 1; if(playerIndex === currentStep){ if(currentStep === TOTAL_STEPS){ status.textContent = 'Gagné 🎉'; document.getElementById('status1').textContent = 'Gagné 🎉'; stepDisplay.textContent = '7/7'; currentStep = 0; } else { currentStep +=1; playerIndex = 0; stepDisplay.textContent = currentStep; status.textContent = 'Bien joué — suivant'; setTimeout(()=> playback(currentStep), 700); } } } else { status.textContent = 'Erreur ❌'; setTimeout(()=> beep(120,400), 50); currentStep = 0; } }
 
-    function playback(step){
-      playingBack = true;
-      playerIndex = 0;
-      status.textContent = 'Écoute...';
-      message.textContent = '';
-
-      
-      if(step >= 5){
-        gameArea.classList.add('rotate-anim');
-      } else {
-        gameArea.classList.remove('rotate-anim');
-      }
-
-      
-      const base = Math.max(320, 700 - (step-1)*60);
-      let delay = 400; 
-      for(let i=0;i<step;i++){
-        const idx = sequence[i];
-       
-        setTimeout(((index, ms)=>()=> highlight(index, ms))(idx, base), delay);
-        delay += base + 160; 
-      }
-     
-      setTimeout(()=>{
-        playingBack = false;
-        gameArea.classList.remove('rotate-anim');
-        status.textContent = 'À toi';
-      }, delay + 60);
-    }
-
-    function startGame(){
-      sequence = randSeq(TOTAL_STEPS);
-      currentStep = 1;
-      stepDisplay.textContent = currentStep;
-      message.textContent = '';
-      status.textContent = 'Prépare...';
-      
-      ensureAudio();
-      if(audioCtx.state === 'suspended') audioCtx.resume();
-      setTimeout(()=> playback(currentStep), 350);
-    }
-
-    function resetGame(){
-      sequence = [];
-      currentStep = 0;
-      playerIndex = 0;
-      playingBack = false;
-      stepDisplay.textContent = '—';
-      status.textContent = 'Réinitialisé';
-      message.textContent = '';
-      gameArea.classList.remove('rotate-anim');
-    }
-
-    function handlePlayerClick(index){
-      if(playingBack) return; 
-      if(currentStep === 0) return; 
-
-     
-      highlight(index, 180);
-
-      if(index === sequence[playerIndex]){
-        playerIndex += 1;
-        if(playerIndex === currentStep){
-       
-          if(currentStep === TOTAL_STEPS){
-         
-            status.textContent = 'Gagné 🎉';
-            message.textContent = 'Bravo ! Tu as terminé les 7 étapes.';
-            currentStep = 0; 
-          } else {
-           
-            currentStep += 1;
-            playerIndex = 0;
-            stepDisplay.textContent = currentStep;
-            status.textContent = 'Bien joué — suivant';
-           
-            setTimeout(()=> playback(currentStep), 700);
-          }
-        }
-      } else {
-        
-        status.textContent = 'Erreur ❌';
-        message.textContent = 'Mauvaise séquence — réessaie (réinitialise si tu veux).';
-        
-        beep(120, 400);
-        currentStep = 0;
-      }
-    }
-
-   
-    segments.forEach((seg, i)=>{
-      seg.addEventListener('click', ()=> handlePlayerClick(i));
-      
-      seg.addEventListener('keydown', (ev)=>{
-        if(ev.key === 'Enter' || ev.key === ' '){
-          ev.preventDefault();
-          seg.classList.add('active');
-          setTimeout(()=> seg.classList.remove('active'), 150);
-          handlePlayerClick(i);
-        }
-      });
-    });
-
-    startBtn.addEventListener('click', ()=>{
-      if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-      startGame();
-    });
-
+    segments.forEach((seg,i)=>{ seg.addEventListener('click', ()=> handlePlayerClick(i)); seg.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); seg.classList.add('active'); setTimeout(()=> seg.classList.remove('active'), 150); handlePlayerClick(i); } }); });
+    startBtn.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); startGame(); });
     resetBtn.addEventListener('click', resetGame);
-
- 
     resetGame();
 
-    
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 's' && (e.ctrlKey || e.metaKey)){
-     
-        e.preventDefault(); startGame();
-      }
-    });
+    // expose small helper to jump to a slide programmatically if needed
+    window.showWalidfare = showSlide;
 
   })();
   </script>
