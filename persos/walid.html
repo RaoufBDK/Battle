@@ -21,7 +21,7 @@
     .icone-retour { position: fixed; top: 15px; left: 15px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
     .icone-retour:hover { transform: scale(1.2); }
 
-    
+    /* Walidfare carousel */
     .walidfare-section{ max-width:980px; margin:36px auto; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
     .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .wf-title{ font-size:20px; font-weight:900; }
@@ -35,7 +35,7 @@
     .wf-dot{ width:10px; height:10px; border-radius:50%; background:#ddd; }
     .wf-dot.active{ background:var(--accent); box-shadow:0 4px 10px rgba(11,116,255,0.18); }
 
-  
+    /* reuse Simon game styles inside slide */
     .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow: 0 12px 30px rgba(0,0,0,0.18); overflow: visible; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
     .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-family:inherit; font-size:18px; }
     .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
@@ -52,7 +52,7 @@
     .rotate-anim{ animation: spin 2.6s linear infinite; }
     @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
 
- 
+    /* placeholder styles for upcoming Walidfares */
     .placeholder{ min-height:280px; display:flex; align-items:center; justify-content:center; gap:18px; flex-direction:column; color:#333; }
     .kbd{ font-weight:900; background:#111; color:#fff; padding:6px 10px; border-radius:6px; }
 
@@ -76,27 +76,13 @@
     </div>
   </div>
 
- 
-  <section class="walidfare-section" aria-label="Walidfare — mini jeux">
-    <div class="wf-header">
-      <div class="wf-title">Walidfare — Choisis un mini-jeu</div>
-      <div class="wf-controls">
-        <div class="wf-nav">
-          <button id="prevSlide" class="wf-nav-btn" aria-label="Précédent">◀</button>
-          <button id="nextSlide" class="wf-nav-btn" aria-label="Suivant">▶</button>
-          <div class="wf-indicators" id="wfIndicators"></div>
-        </div>
-        <div style="margin-left:12px; font-size:13px; color:#444;">Utilise aussi les flèches ← et → du clavier</div>
-      </div>
-    </div>
 
-  
     <div id="wf1" class="wf-slide active" data-index="0">
       <h3>Walidfare 1 — Simon-like</h3>
       <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes. (Démarrer ci-dessous)</p>
 
       <div style="display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;">
-   
+        <!-- Simon game area (copied and scoped) -->
         <div>
           <div class="game-area" id="gameArea1" role="application" aria-label="Walidfare 1 Simon">
             <div class="segment seg-0" data-index="0" tabindex="0">1</div>
@@ -117,32 +103,14 @@
       </div>
     </div>
 
-
-    <div id="wf2" class="wf-slide" data-index="1">
-      <h3>Walidfare 2 — Empiler les boîtes (à venir)</h3>
-      <div class="placeholder">
-        <div>Mini-jeu attendu: un chevalier (loubia) doit empiler 5 boîtes avec physiques, les maintenir 10s sans qu'elles tombent.</div>
-        <div>Contrôle: glisser-déposer les boîtes avec la souris. Physique et contraintes à implémenter.</div>
-        <div class="kbd">Prévisualisation: zone de jeu (sera interactive)</div>
-      </div>
-    </div>
-
-  
-    <div id="wf3" class="wf-slide" data-index="2">
-      <h3>Walidfare 3 — Piano répète une mélodie (à venir)</h3>
-      <div class="placeholder">
-        <div>Mini-jeu attendu: utiliser les touches QWERTYUIOP (ou affichage piano) pour répéter un morceau.</div>
-        <div>Trois choix de morceaux: 1) Smash Mouth – All Star (début) 2) Rick Astley – Never Gonna Give You Up (passage) 3) On m'appelle l'ovni (refrain).</div>
-        <div class="kbd">Prévisualisation: touches cliquables et zone son</div>
-      </div>
-    </div>
+    
 
   </section>
 
   <script>
-
+  // WALIDFARE carousel logic + initialize Walidfare 1 (simon) as before
   (function(){
-
+    // Carousel
     const slides = Array.from(document.querySelectorAll('.wf-slide'));
     const indicators = document.getElementById('wfIndicators');
     let current = 0;
@@ -172,7 +140,7 @@
 
     renderIndicators(); showSlide(0);
 
-  
+    /* ----------------- Walidfare 1 (Simon) implementation (scoped ids) ----------------- */
     const TOTAL_STEPS = 7;
     const gameArea = document.getElementById('gameArea1');
     const segments = Array.from(gameArea.querySelectorAll('.segment'));
@@ -205,7 +173,7 @@
     resetBtn.addEventListener('click', resetGame);
     resetGame();
 
-
+    // expose small helper to jump to a slide programmatically if needed
     window.showWalidfare = showSlide;
 
   })();
