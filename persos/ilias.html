@@ -79,6 +79,78 @@
     </div>
   </div>
 
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Petit carré cliquable</title>
+  <style>
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      margin:0;
+      background:#222;
+      font-family:Arial, sans-serif;
+      color:#fff;
+    }
+    .carre{
+      width:150px;
+      height:150px;
+      background:#4caf50;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      border-radius:10px;
+      font-weight:bold;
+      text-align:center;
+      transition:0.3s;
+    }
+    .carre:hover{ background:#45a047; }
+
+    .message{
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      max-width:600px;
+    }
+    .message h1{
+      font-size:28px;
+      margin-bottom:20px;
+    }
+    .message img{
+      max-width:400px;
+      border-radius:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="carre" id="carre">
+    Clique si tu veux<br>passer du bon côté
+  </div>
+
+  <div class="message" id="message">
+    <h1>✨ Viens du bon côté ✨</h1>
+    <img src="https://www.tiktok.com/api/img/?itemId=7548254769341631750&location=3&aid=1988&index=1" alt="Chien drôle qui pointe du doigt">
+  </div>
+
+  <script>
+    const carre = document.getElementById("carre");
+    const msg = document.getElementById("message");
+
+    carre.addEventListener("click", () => {
+      carre.style.display = "none";
+      msg.style.display = "flex";
+    });
+  </script>
+
+</body>
+</html>
 
 
 
