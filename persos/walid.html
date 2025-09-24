@@ -5,72 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Présentation Walid — Walidfare</title>
   <style>
-    :root{ --bg:#fff; --text:#222; --accent:#0b74ff; --key-dark:#222; --key-light:#fff; }
+    :root{ --bg:#fff; --text:#222; --accent:#0b74ff; }
     html,body{ height:100%; margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
-    body{ margin:24px; transition: background 300ms ease; }
+    body{ margin:40px; transition: background 300ms ease; }
 
-    .container { display:flex; justify-content:center; align-items:center; gap:24px; flex-wrap:wrap; }
-    .container img { width:180px; height:280px; object-fit:cover; border-radius:10px; box-shadow:0 9px 12px rgba(0,0,0,0.25); }
-    .texte { width:200px; text-align:justify; }
+    .container {
+      display: flex;
+      justify-content: center; 
+      align-items: center;
+      gap: 40px; 
+    }
 
-    .icone-retour { position: fixed; top: 12px; left: 12px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
-    .icone-retour:hover { transform: scale(1.15); }
+    .container img { width: 250px; height: 400px; object-fit: cover; border-radius: 10px; box-shadow: 0 9px 12px rgba(0,0,0,0.4); }
+    .texte { width: 200px; text-align: justify; }
+    .icone-retour { position: fixed; top: 15px; left: 15px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
+    .icone-retour:hover { transform: scale(1.2); }
 
-    /* WALIDFARE section */
-    .walidfare-section{ max-width:1100px; margin:28px auto; padding:18px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
-    .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    
+    .walidfare-section{ max-width:980px; margin:36px auto; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
+    .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .wf-title{ font-size:20px; font-weight:900; }
     .wf-controls{ display:flex; gap:8px; align-items:center; }
     .wf-btn{ padding:8px 12px; border-radius:8px; border:none; background:var(--accent); color:#fff; cursor:pointer; font-weight:800; }
     .wf-nav{ display:flex; gap:8px; align-items:center; }
-    .wf-slide{ display:none; padding:12px; margin-top:12px; }
+    .wf-slide{ display:none; padding:18px; margin-top:16px; }
     .wf-slide.active{ display:block; }
     .wf-nav-btn{ padding:8px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:#fff; cursor:pointer; }
     .wf-indicators{ display:flex; gap:6px; margin-left:8px; }
     .wf-dot{ width:10px; height:10px; border-radius:50%; background:#ddd; }
     .wf-dot.active{ background:var(--accent); box-shadow:0 4px 10px rgba(11,116,255,0.18); }
 
-    /* Simon reuse small */
-    .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow:0 12px 30px rgba(0,0,0,0.18); display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
-    .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-size:18px; }
+  
+    .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow: 0 12px 30px rgba(0,0,0,0.18); overflow: visible; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
+    .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-family:inherit; font-size:18px; }
     .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
     .seg-1{ background: #e74c3c; border-top-right-radius: 100% 100%; }
     .seg-2{ background: #f1c40f; border-bottom-left-radius: 100% 100%; }
     .seg-3{ background: #3498db; border-bottom-right-radius: 100% 100%; }
     .segment.active{ filter: brightness(1.38) saturate(1.1); transform: scale(1.04); box-shadow: 0 14px 28px rgba(0,0,0,0.28); }
-    .center-hole{ position:absolute; width:120px;height:120px; left:50%;top:50%;transform:translate(-50%,-50%); background:#111; color:#fff; border-radius:50%; display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
-
+    .center-hole{ position:absolute; width:120px;height:120px; left:50%;top:50%;transform:translate(-50%,-50%); background: #111; color:#fff; border-radius:50%; display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px;box-shadow:0 8px 20px rgba(0,0,0,0.25); }
     .controls{ display:flex; flex-direction:column; gap:8px; align-items:center; }
     .controls .btn{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
     .start-btn{ background: var(--accent); color:#fff; }
     .reset-btn{ background:#444; color:#fff; }
-
     .status{ margin-top:8px; font-weight:800; }
     .rotate-anim{ animation: spin 2.6s linear infinite; }
     @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
 
-    /* Walidfare 2 styles */
-    .stack-game-wrap{ display:flex; gap:14px; align-items:flex-start; justify-content:center; margin-top:8px; flex-wrap:wrap; }
-    .canvas-wrap{ background:linear-gradient(#dff3ff,#ffffff); border-radius:8px; padding:10px; box-shadow:0 8px 22px rgba(0,0,0,0.06); }
-    #stackCanvas{ background:#e9f3e9; display:block; border-radius:6px; }
+ 
+    .placeholder{ min-height:280px; display:flex; align-items:center; justify-content:center; gap:18px; flex-direction:column; color:#333; }
+    .kbd{ font-weight:900; background:#111; color:#fff; padding:6px 10px; border-radius:6px; }
 
-    .stack-ui{ max-width:320px; display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
-    .small-btn{ padding:8px 10px; border-radius:8px; border:none; background:#0b74ff; color:#fff; cursor:pointer; font-weight:700; }
-    .hint{ font-size:14px; color:#333; }
-    .meter{ font-weight:800; margin-top:6px; }
-
-    .success-overlay{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); color:#fff; font-size:22px; font-weight:900; border-radius:8px; }
-
-    /* Walidfare 3 (Piano) */
-    .piano-area{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px; }
-    .piano-keys{ display:flex; gap:6px; align-items:flex-end; justify-content:center; }
-    .key { width:60px; height:160px; border-radius:6px; background:var(--key-light); border:2px solid #222; display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px; cursor:pointer; user-select:none; box-shadow:0 8px 18px rgba(0,0,0,0.08); transition: transform 120ms ease, box-shadow 120ms ease; font-weight:800; font-size:14px; }
-    .key.dark{ background:var(--key-dark); color:#fff; }
-    .key.active { transform: translateY(-6px); box-shadow: 0 18px 32px rgba(0,0,0,0.22); }
-    .piano-controls{ display:flex; gap:8px; align-items:center; }
-    .selector{ padding:8px 10px; border-radius:8px; border:1px solid #ccc; }
-
-    @media (max-width:900px){ .walidfare-section{ padding:12px; } .container img{ display:none; } .stack-game-wrap{ flex-direction:column; align-items:center; } .key{ width:44px; height:120px; } }
+    @media (max-width:900px){ .walidfare-section{ padding:12px; } }
   </style>
 </head>
 <body>
@@ -90,7 +76,7 @@
     </div>
   </div>
 
-  <!-- WALIDFARE SECTION -->
+ 
   <section class="walidfare-section" aria-label="Walidfare — mini jeux">
     <div class="wf-header">
       <div class="wf-title">Walidfare — Choisis un mini-jeu</div>
@@ -104,11 +90,13 @@
       </div>
     </div>
 
-    <!-- Slide 1 : Simon-like -->
+  
     <div id="wf1" class="wf-slide active" data-index="0">
       <h3>Walidfare 1 — Simon-like</h3>
-      <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes.</p>
+      <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes. (Démarrer ci-dessous)</p>
+
       <div style="display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;">
+   
         <div>
           <div class="game-area" id="gameArea1" role="application" aria-label="Walidfare 1 Simon">
             <div class="segment seg-0" data-index="0" tabindex="0">1</div>
@@ -125,86 +113,66 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
-    <!-- Slide 2 : Stack boxes (Walidfare 2) -->
+
     <div id="wf2" class="wf-slide" data-index="1">
-      <h3>Walidfare 2 — Empiler les boîtes (Loubia sauve la princesse)</h3>
-      <p>Glisse-dépose 5 boîtes sur la plateforme (zone cible). Garde-les stables 10 secondes pour sauver la princesse 🌳👸</p>
-
-      <div class="stack-game-wrap">
-        <div class="canvas-wrap" style="position:relative;">
-          <canvas id="stackCanvas" width="720" height="360"></canvas>
-          <div id="successOverlay" class="success-overlay" style="display:none;">
-            👑 La princesse est sauvée ! Le chevalier loubia est heureux 🎉
-          </div>
-        </div>
-
-        <div class="stack-ui">
-          <button id="sgReset" class="small-btn">Réinitialiser le niveau</button>
-          <div class="hint">Déplace une boîte en cliquant-glissant (ou tactile). Empile 5 boîtes dans la zone verte et garde-les stables 10s.</div>
-          <div class="meter">Temps restant stabilité: <span id="stableTimer">10.0</span>s</div>
-          <div class="meter">Boîtes en zone: <span id="inZone">0</span> / 5</div>
-        </div>
+      <h3>Walidfare 2 — Empiler les boîtes (à venir)</h3>
+      <div class="placeholder">
+        <div>Mini-jeu attendu: un chevalier (loubia) doit empiler 5 boîtes avec physiques, les maintenir 10s sans qu'elles tombent.</div>
+        <div>Contrôle: glisser-déposer les boîtes avec la souris. Physique et contraintes à implémenter.</div>
+        <div class="kbd">Prévisualisation: zone de jeu (sera interactive)</div>
       </div>
     </div>
 
-    <!-- Slide 3 : Piano (Walidfare 3) -->
+  
     <div id="wf3" class="wf-slide" data-index="2">
-      <h3>Walidfare 3 — Piano répète une mélodie</h3>
-      <p>Choisis une mélodie, écoute la suite au piano (Q W E R T Y U I O) puis répète-la. Le jeu progresse comme Walidfare 1.</p>
-
-      <div class="piano-area">
-        <div class="piano-controls">
-          <select id="songSelect" class="selector" aria-label="Choisir une mélodie">
-            <option value="1">1 — All Star (Smash Mouth) — début</option>
-            <option value="2">2 — Never Gonna Give You Up (Rick Astley) — passage</option>
-            <option value="3">3 — On m'appelle l'ovni — refrain</option>
-          </select>
-          <button id="pStart" class="wf-btn">Démarrer</button>
-          <button id="pReset" class="wf-nav-btn">Réinitialiser</button>
-          <div style="margin-left:12px; font-weight:800;">Touches: Q W E R T Y U I O</div>
-        </div>
-
-        <div class="piano-keys" id="pianoKeys" role="application" aria-label="Clavier piano">
-          <!-- 9 keys: Q W E R T Y U I O -->
-          <div class="key" data-index="0" data-key="Q">Q<br><small>C4</small></div>
-          <div class="key" data-index="1" data-key="W">W<br><small>D4</small></div>
-          <div class="key" data-index="2" data-key="E">E<br><small>E4</small></div>
-          <div class="key" data-index="3" data-key="R">R<br><small>F4</small></div>
-          <div class="key" data-index="4" data-key="T">T<br><small>G4</small></div>
-          <div class="key" data-index="5" data-key="Y">Y<br><small>A4</small></div>
-          <div class="key" data-index="6" data-key="U">U<br><small>B4</small></div>
-          <div class="key" data-index="7" data-key="I">I<br><small>C5</small></div>
-          <div class="key" data-index="8" data-key="O">O<br><small>D5</small></div>
-        </div>
-
-        <div style="display:flex;gap:12px;align-items:center;">
-          <div style="font-weight:900;">Étapes: <span id="pStep">—</span></div>
-          <div style="font-weight:900;">Statut: <span id="pStatus">Prêt</span></div>
-        </div>
+      <h3>Walidfare 3 — Piano répète une mélodie (à venir)</h3>
+      <div class="placeholder">
+        <div>Mini-jeu attendu: utiliser les touches QWERTYUIOP (ou affichage piano) pour répéter un morceau.</div>
+        <div>Trois choix de morceaux: 1) Smash Mouth – All Star (début) 2) Rick Astley – Never Gonna Give You Up (passage) 3) On m'appelle l'ovni (refrain).</div>
+        <div class="kbd">Prévisualisation: touches cliquables et zone son</div>
       </div>
     </div>
 
   </section>
 
   <script>
-  // Carousel
+
   (function(){
+
     const slides = Array.from(document.querySelectorAll('.wf-slide'));
     const indicators = document.getElementById('wfIndicators');
     let current = 0;
-    function renderIndicators(){ indicators.innerHTML=''; slides.forEach((s,i)=>{ const dot=document.createElement('div'); dot.className='wf-dot'+(i===current?' active':''); indicators.appendChild(dot); }); }
-    function showSlide(index){ if(index<0) index=slides.length-1; if(index>=slides.length) index=0; slides.forEach(s=>s.classList.remove('active')); slides[index].classList.add('active'); current=index; renderIndicators(); }
-    document.getElementById('prevSlide').addEventListener('click', ()=>showSlide(current-1));
-    document.getElementById('nextSlide').addEventListener('click', ()=>showSlide(current+1));
-    document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowLeft') showSlide(current-1); if(e.key==='ArrowRight') showSlide(current+1); });
-    renderIndicators(); showSlide(0);
-  })();
 
-  /* ---------------- Walidfare 1 (Simon) ---------------- */
-  (function(){
+    function renderIndicators(){
+      indicators.innerHTML = '';
+      slides.forEach((s,i)=>{
+        const dot = document.createElement('div'); dot.className='wf-dot'+(i===current? ' active':''); indicators.appendChild(dot);
+      });
+    }
+
+    function showSlide(index){
+      if(index < 0) index = slides.length -1;
+      if(index >= slides.length) index = 0;
+      slides.forEach(s=> s.classList.remove('active'));
+      slides[index].classList.add('active');
+      current = index; renderIndicators();
+    }
+
+    document.getElementById('prevSlide').addEventListener('click', ()=> showSlide(current-1));
+    document.getElementById('nextSlide').addEventListener('click', ()=> showSlide(current+1));
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowLeft') showSlide(current-1);
+      if(e.key === 'ArrowRight') showSlide(current+1);
+    });
+
+    renderIndicators(); showSlide(0);
+
+  
     const TOTAL_STEPS = 7;
     const gameArea = document.getElementById('gameArea1');
     const segments = Array.from(gameArea.querySelectorAll('.segment'));
@@ -212,212 +180,33 @@
     const resetBtn = document.getElementById('resetBtn1');
     const stepDisplay = document.getElementById('stepDisplay1');
     const status = document.getElementById('status1');
-    let sequence=[], playerIndex=0, currentStep=0, playingBack=false, audioCtx=null;
-    const freqs=[261.6,329.6,392.0,523.3];
-    function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
-    function beep(freq,duration=220){ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sine'; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination); g.gain.value=0.0001; o.start(); g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime+0.02); setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.02); setTimeout(()=>{ try{o.stop();}catch(e){} },50); }, duration); }
-    function randSeq(len){ const arr=[]; for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4)); return arr; }
-    function highlight(index, ms){ const el=segments[index]; el.classList.add('active'); beep(freqs[index], Math.max(120, ms-40)); setTimeout(()=>el.classList.remove('active'), ms); }
-    function playback(step){ playingBack=true; playerIndex=0; status.textContent='Écoute...'; if(step>=5) gameArea.classList.add('rotate-anim'); else gameArea.classList.remove('rotate-anim'); const base=Math.max(320,700-(step-1)*60); let delay=400; for(let i=0;i<step;i++){ const idx=sequence[i]; setTimeout(((index,ms)=>()=>highlight(index,ms))(idx,base), delay); delay+=base+160; } setTimeout(()=>{ playingBack=false; gameArea.classList.remove('rotate-anim'); status.textContent='À toi'; }, delay+60); }
-    function startGame(){ sequence=randSeq(TOTAL_STEPS); currentStep=1; stepDisplay.textContent=currentStep; status.textContent='Prépare...'; ensureAudio(); if(audioCtx.state==='suspended') audioCtx.resume(); setTimeout(()=>playback(currentStep),350); }
-    function resetGame(){ sequence=[]; currentStep=0; playerIndex=0; playingBack=false; stepDisplay.textContent='—'; status.textContent='Réinitialisé'; gameArea.classList.remove('rotate-anim'); }
-    function handlePlayerClick(index){ if(playingBack) return; if(currentStep===0) return; highlight(index,180); if(index===sequence[playerIndex]){ playerIndex+=1; if(playerIndex===currentStep){ if(currentStep===TOTAL_STEPS){ status.textContent='Gagné 🎉'; stepDisplay.textContent='7/7'; currentStep=0; } else { currentStep+=1; playerIndex=0; stepDisplay.textContent=currentStep; status.textContent='Bien joué — suivant'; setTimeout(()=>playback(currentStep),700); } } } else { status.textContent='Erreur ❌'; setTimeout(()=>beep(120,400),50); currentStep=0; } }
-    segments.forEach((seg,i)=>{ seg.addEventListener('click', ()=>handlePlayerClick(i)); seg.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); seg.classList.add('active'); setTimeout(()=>seg.classList.remove('active'),150); handlePlayerClick(i); } }); });
-    startBtn.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); startGame(); });
-    resetBtn.addEventListener('click', resetGame);
-    resetGame();
-  })();
 
-  /* ---------------- Walidfare 2: Stack boxes mini-game ---------------- */
-  (function(){
-    const canvas = document.getElementById('stackCanvas');
-    const ctx = canvas.getContext('2d', { alpha: false });
-    const W = canvas.width, H = canvas.height;
-    const gravity = 1100;
-    const friction = 0.98;
-    const groundY = H - 28;
-    const platformX = 420, platformW = 200, platformY = groundY - 10;
-    const targetZone = { x: platformX, y: platformY - 120, w: platformW, h: 120 };
-    const BOX_W = 64, BOX_H = 64;
-    const boxes = [];
-    const initialXs = [40, 40, 40, 40, 40];
-    for(let i=0;i<5;i++){
-      boxes.push({ id:i, x: initialXs[i], y: 40 + i*18, w: BOX_W, h: BOX_H, vx:0, vy:0, dragging:false, color: ['#c0392b','#27ae60','#f39c12','#2980b9','#8e44ad'][i], settled:false });
-    }
-    let drag = { box: null, offsetX:0, offsetY:0 };
-    let lastTime = null;
-    let successOverlay = document.getElementById('successOverlay');
-    const stableTimerEl = document.getElementById('stableTimer');
-    const inZoneEl = document.getElementById('inZone');
-    const sgReset = document.getElementById('sgReset');
-    let stableCountdown = 10.0;
-    let stabilityActive = false;
-    function pointInBox(x,y,b){ return x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h; }
-    function toLocal(e){ const rect = canvas.getBoundingClientRect(); if (e.touches && e.touches[0]) { return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top }; } else { return { x: e.clientX - rect.left, y: e.clientY - rect.top }; } }
-    canvas.addEventListener('mousedown', (e)=>{ const p = toLocal(e); for(let i=boxes.length-1;i>=0;i--){ const b = boxes[i]; if(pointInBox(p.x,p.y,b)){ drag.box = b; drag.offsetX = p.x - b.x; drag.offsetY = p.y - b.y; b.dragging = true; b.vx = 0; b.vy = 0; boxes.splice(i,1); boxes.push(b); break; } } });
-    canvas.addEventListener('touchstart', (e)=>{ e.preventDefault(); const p = toLocal(e); canvas.dispatchEvent(new MouseEvent('mousedown', {clientX: p.x + canvas.getBoundingClientRect().left, clientY: p.y + canvas.getBoundingClientRect().top })); });
-    window.addEventListener('mousemove', (e)=>{ if(!drag.box) return; const p = toLocal(e); drag.box.x = p.x - drag.offsetX; drag.box.y = p.y - drag.offsetY; });
-    window.addEventListener('touchmove', (e)=>{ e.preventDefault(); if(!drag.box) return; const p = toLocal(e); drag.box.x = p.x - drag.offsetX; drag.box.y = p.y - drag.offsetY; });
-    window.addEventListener('mouseup', (e)=>{ if(drag.box){ drag.box.dragging = false; drag.box = null; } });
-    window.addEventListener('touchend', (e)=>{ if(drag.box){ drag.box.dragging = false; drag.box = null; } });
-    function resetLevel(){ successOverlay.style.display = 'none'; stableCountdown = 10.0; stabilityActive = false; boxes.forEach((b,i)=>{ b.x = initialXs[i]; b.y = 40 + i*18; b.vx=0; b.vy=0; b.settled=false; }); lastTime = null; updateUI(); }
-    function updateUI(){ stableTimerEl.textContent = stableCountdown.toFixed(1); inZoneEl.textContent = boxes.filter(b=> (b.x + b.w/2) >= targetZone.x && (b.x + b.w/2) <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6 ).length; }
-    sgReset.addEventListener('click', resetLevel);
-    function resolveCollisions(){ for(const b of boxes){ if(b.dragging) continue; if(b.y + b.h > groundY){ b.y = groundY - b.h; b.vy = 0; b.vx *= 0.9; } } for(let i=0;i<boxes.length;i++){ for(let j=0;j<boxes.length;j++){ if(i===j) continue; const A = boxes[i], B = boxes[j]; if (A.x < B.x + B.w && A.x + A.w > B.x && A.y < B.y + B.h && A.y + A.h > B.y) { const overlapX = Math.min(A.x + A.w - B.x, B.x + B.w - A.x); const overlapY = Math.min(A.y + A.h - B.y, B.y + B.h - A.y); if(overlapY < overlapX){ if(A.y < B.y){ A.y = B.y - A.h; A.vy = 0; A.vx *= 0.9; } else { A.y = B.y + B.h; A.vy = Math.max(0, A.vy); } } else { if(A.x < B.x) A.x -= overlapX/2; else A.x += overlapX/2; A.vx *= 0.8; } } } } }
-    function checkStability(dt){ let countInZone = 0; let allSettled = true; for(const b of boxes){ const centerX = b.x + b.w/2; const inZone = (centerX >= targetZone.x && centerX <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6); if(inZone) countInZone++; const velSmall = Math.abs(b.vx) < 6 && Math.abs(b.vy) < 6; const onSomething = (b.y + b.h >= groundY - 0.5) || boxes.some(other => other !== b && Math.abs((b.y + b.h) - other.y) < 1 && Math.abs(b.x - other.x) < b.w); b.settled = velSmall && onSomething; if(!b.settled) allSettled = false; } inZoneEl.textContent = countInZone; if(countInZone === boxes.length && allSettled){ stabilityActive = true; stableCountdown -= dt; if(stableCountdown < 0) stableCountdown = 0; } else { stabilityActive = false; stableCountdown = 10.0; } stableTimerEl.textContent = stableCountdown.toFixed(1); if(stabilityActive && stableCountdown <= 0){ successOverlay.style.display = 'flex'; } }
-    function draw(){ ctx.save(); ctx.fillStyle = '#eaf4f0'; ctx.fillRect(0,0,W,H); ctx.fillStyle = '#7b5a2b'; ctx.fillRect(W-120, 36, 20, 60); ctx.fillStyle = '#2d8f2d'; ctx.beginPath(); ctx.arc(W-110, 30, 40, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(W-86, 48, 34, 0, Math.PI*2); ctx.fill(); ctx.font = '28px serif'; ctx.fillStyle = '#000'; ctx.fillText('👸', W-110, 22); ctx.font = '28px serif'; ctx.fillText('🛡️', 18, 30); ctx.fillText('🧑‍🌾', 18, 60); ctx.fillStyle = 'rgba(40,200,120,0.14)'; ctx.fillRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h); ctx.strokeStyle = 'rgba(40,200,120,0.5)'; ctx.lineWidth = 2; ctx.strokeRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h); ctx.fillStyle = '#6b8f4a'; ctx.fillRect(platformX, platformY, platformW, 10); ctx.fillStyle = '#574b3b'; ctx.fillRect(0, groundY, W, H-groundY); for(const b of boxes){ ctx.fillStyle = b.color; ctx.fillRect(Math.round(b.x), Math.round(b.y), b.w, b.h); ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.strokeRect(Math.round(b.x)+0.5, Math.round(b.y)+0.5, b.w, b.h); } ctx.restore(); }
-    let running = true;
-    function step(t){ if(!lastTime) lastTime = t; const dt = Math.min(0.032, (t - lastTime) / 1000); lastTime = t; for(const b of boxes){ if(b.dragging) continue; b.vy += gravity * dt; b.x += b.vx * dt; b.y += b.vy * dt; b.vx *= Math.pow(friction, dt*60); } resolveCollisions(); checkStability(dt); draw(); if(running) requestAnimationFrame(step); }
-    requestAnimationFrame(step);
-    resetLevel();
-    canvas.addEventListener('dblclick', (e)=>{ const p = toLocal(e); for(let i=0;i<boxes.length;i++){ if(pointInBox(p.x,p.y,boxes[i])){ boxes[i].x = targetZone.x + (targetZone.w - boxes[i].w)/2; boxes[i].y = targetZone.y + targetZone.h - boxes[i].h; boxes[i].vx = 0; boxes[i].vy = 0; break; } } });
-    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='r') resetLevel(); });
-  })();
-
-  /* ---------------- Walidfare 3: Piano Simon-like ---------------- */
-  (function(){
-    // Key mapping: Q W E R T Y U I O => indices 0..8
-    const keyElems = Array.from(document.querySelectorAll('#pianoKeys .key'));
-    const pStart = document.getElementById('pStart');
-    const pReset = document.getElementById('pReset');
-    const songSelect = document.getElementById('songSelect');
-    const pStep = document.getElementById('pStep');
-    const pStatus = document.getElementById('pStatus');
-
-    // note frequencies for keys C4..D5
-    const freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33];
-
-    // Three melodies (arrays of indices) - short 8-note sequences used as the target melody
-    const melodies = {
-      '1': [4,4,5,6,7,6,5,4],     // All Star - simplified riff
-      '2': [5,5,4,3,4,5,7,6],     // Rick Astley - simplified passage
-      '3': [2,3,4,5,4,3,2,1]      // On m'appelle l'ovni - simplified refrain
-    };
-
-    const TOTAL_STEPS = 8; // length of each melody
-    let chosen = '1';
     let sequence = [];
-    let currentStep = 0;
     let playerIndex = 0;
+    let currentStep = 0;
     let playingBack = false;
     let audioCtx = null;
+    const freqs = [261.6, 329.6, 392.0, 523.3];
 
-    function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-    function tone(freq, duration=240){
-      ensureAudio();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = freq;
-      o.connect(g); g.connect(audioCtx.destination);
-      g.gain.value = 0.0001;
-      o.start();
-      g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.02);
-      setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02); setTimeout(()=>{ try{o.stop(); }catch(e){} }, 60); }, duration);
-    }
+    function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } }
+    function beep(freq, duration=220){ ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination); g.gain.value = 0.0001; o.start(); g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02); setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 50); }, duration); }
+    function randSeq(len){ const arr=[]; for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4)); return arr; }
+    function highlight(index, ms){ const el = segments[index]; el.classList.add('active'); beep(freqs[index], Math.max(120, ms-40)); setTimeout(()=> el.classList.remove('active'), ms); }
 
-    function highlightKey(idx, ms){
-      const el = keyElems[idx];
-      if(!el) return;
-      el.classList.add('active');
-      tone(freqs[idx], Math.max(120, ms-40));
-      setTimeout(()=> el.classList.remove('active'), ms);
-    }
+    function playback(step){ playingBack = true; playerIndex = 0; status.textContent = 'Écoute...'; if(step >=5) gameArea.classList.add('rotate-anim'); else gameArea.classList.remove('rotate-anim'); const base = Math.max(320, 700 - (step-1)*60); let delay = 400; for(let i=0;i<step;i++){ const idx = sequence[i]; setTimeout(((index, ms)=>()=> highlight(index, ms))(idx, base), delay); delay += base + 160; } setTimeout(()=>{ playingBack = false; gameArea.classList.remove('rotate-anim'); status.textContent = 'À toi'; }, delay + 60); }
 
-    function setChosen(val){ chosen = val; pStatus.textContent = 'Prêt'; pStep.textContent = '—'; }
+    function startGame(){ sequence = randSeq(TOTAL_STEPS); currentStep = 1; stepDisplay.textContent = currentStep; status.textContent = 'Prépare...'; ensureAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); setTimeout(()=> playback(currentStep), 350); }
+    function resetGame(){ sequence = []; currentStep = 0; playerIndex = 0; playingBack = false; stepDisplay.textContent = '—'; status.textContent = 'Réinitialisé'; gameArea.classList.remove('rotate-anim'); }
 
-    songSelect.addEventListener('change', (e)=> setChosen(e.target.value) );
+    function handlePlayerClick(index){ if(playingBack) return; if(currentStep === 0) return; highlight(index, 180); if(index === sequence[playerIndex]){ playerIndex += 1; if(playerIndex === currentStep){ if(currentStep === TOTAL_STEPS){ status.textContent = 'Gagné 🎉'; document.getElementById('status1').textContent = 'Gagné 🎉'; stepDisplay.textContent = '7/7'; currentStep = 0; } else { currentStep +=1; playerIndex = 0; stepDisplay.textContent = currentStep; status.textContent = 'Bien joué — suivant'; setTimeout(()=> playback(currentStep), 700); } } } else { status.textContent = 'Erreur ❌'; setTimeout(()=> beep(120,400), 50); currentStep = 0; } }
 
-    function startPiano(){
-      // use the chosen melody as the sequence
-      sequence = melodies[chosen].slice(); // copy
-      currentStep = 1;
-      playerIndex = 0;
-      pStep.textContent = currentStep + ' / ' + TOTAL_STEPS;
-      pStatus.textContent = 'Écoute...';
-      ensureAudio();
-      if(audioCtx.state === 'suspended') audioCtx.resume();
-      setTimeout(()=> playback(currentStep), 300);
-    }
+    segments.forEach((seg,i)=>{ seg.addEventListener('click', ()=> handlePlayerClick(i)); seg.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); seg.classList.add('active'); setTimeout(()=> seg.classList.remove('active'), 150); handlePlayerClick(i); } }); });
+    startBtn.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); startGame(); });
+    resetBtn.addEventListener('click', resetGame);
+    resetGame();
 
-    function resetPiano(){
-      sequence = [];
-      currentStep = 0;
-      playerIndex = 0;
-      playingBack = false;
-      pStep.textContent = '—';
-      pStatus.textContent = 'Réinitialisé';
-    }
 
-    function playback(step){
-      playingBack = true;
-      playerIndex = 0;
-      pStatus.textContent = 'Écoute...';
-      const base = Math.max(220, 420 - (step-1)*20); // slightly faster each step
-      let delay = 260;
-      for(let i=0;i<step;i++){
-        const idx = sequence[i];
-        setTimeout(((index,ms)=>()=> highlightKey(index,ms))(idx, base), delay);
-        delay += base + 120;
-      }
-      setTimeout(()=>{ playingBack = false; pStatus.textContent = 'À toi'; }, delay + 40);
-    }
-
-    function handleInput(idx){
-      if(playingBack) return;
-      if(currentStep === 0) return;
-      highlightKey(idx, 180);
-      if(idx === sequence[playerIndex]){
-        playerIndex += 1;
-        if(playerIndex === currentStep){
-          if(currentStep === TOTAL_STEPS){
-            pStatus.textContent = 'Gagné 🎹🎉';
-            pStep.textContent = TOTAL_STEPS + ' / ' + TOTAL_STEPS;
-            currentStep = 0;
-          } else {
-            currentStep += 1;
-            playerIndex = 0;
-            pStep.textContent = currentStep + ' / ' + TOTAL_STEPS;
-            pStatus.textContent = 'Bien joué — suivant';
-            setTimeout(()=> playback(currentStep), 700);
-          }
-        }
-      } else {
-        pStatus.textContent = 'Erreur ❌';
-        // negative beep
-        try{ tone(120, 400); }catch(e){}
-        currentStep = 0;
-      }
-    }
-
-    // click on keys
-    keyElems.forEach((el, i)=>{
-      el.addEventListener('click', ()=> handleInput(i) );
-      // keyboard focus support
-      el.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); el.classList.add('active'); setTimeout(()=> el.classList.remove('active'), 120); handleInput(i); } });
-    });
-
-    // keyboard mapping Q W E R T Y U I O
-    const keyMap = { 'q':0,'w':1,'e':2,'r':3,'t':4,'y':5,'u':6,'i':7,'o':8 };
-    window.addEventListener('keydown', (e)=>{
-      const k = e.key.toLowerCase();
-      if(keyMap.hasOwnProperty(k)){
-        // prevent interfering with other controls
-        if(document.activeElement && document.activeElement.tagName === 'INPUT') return;
-        const idx = keyMap[k];
-        // visual & input
-        // allow starting audio context via first interaction
-        if(!audioCtx) ensureAudio();
-        handleInput(idx);
-      }
-    });
-
-    pStart.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); startPiano(); });
-    pReset.addEventListener('click', resetPiano);
-
-    // init
-    setChosen(songSelect.value);
-    resetPiano();
+    window.showWalidfare = showSlide;
 
   })();
   </script>
