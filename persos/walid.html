@@ -7,56 +7,61 @@
   <style>
     :root{ --bg:#fff; --text:#222; --accent:#0b74ff; }
     html,body{ height:100%; margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
-    body{ margin:40px; transition: background 300ms ease; }
+    body{ margin:24px; transition: background 300ms ease; }
 
-    .container {
-      display: flex;
-      justify-content: center; 
-      align-items: center;
-      gap: 40px; 
-    }
+    .container { display:flex; justify-content:center; align-items:center; gap:24px; flex-wrap:wrap; }
+    .container img { width:180px; height:280px; object-fit:cover; border-radius:10px; box-shadow:0 9px 12px rgba(0,0,0,0.25); }
+    .texte { width:200px; text-align:justify; }
 
-    .container img { width: 250px; height: 400px; object-fit: cover; border-radius: 10px; box-shadow: 0 9px 12px rgba(0,0,0,0.4); }
-    .texte { width: 200px; text-align: justify; }
-    .icone-retour { position: fixed; top: 15px; left: 15px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
-    .icone-retour:hover { transform: scale(1.2); }
+    .icone-retour { position: fixed; top: 12px; left: 12px; font-size: 30px; text-decoration: none; cursor: pointer; transition: transform 0.2s ease; z-index: 1000; }
+    .icone-retour:hover { transform: scale(1.15); }
 
-    /* Walidfare carousel */
-    .walidfare-section{ max-width:980px; margin:36px auto; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
-    .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    /* WALIDFARE section */
+    .walidfare-section{ max-width:1100px; margin:28px auto; padding:18px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); background:linear-gradient(180deg,#fbfcff,#f6f8ff); }
+    .wf-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .wf-title{ font-size:20px; font-weight:900; }
     .wf-controls{ display:flex; gap:8px; align-items:center; }
     .wf-btn{ padding:8px 12px; border-radius:8px; border:none; background:var(--accent); color:#fff; cursor:pointer; font-weight:800; }
     .wf-nav{ display:flex; gap:8px; align-items:center; }
-    .wf-slide{ display:none; padding:18px; margin-top:16px; }
+    .wf-slide{ display:none; padding:12px; margin-top:12px; }
     .wf-slide.active{ display:block; }
     .wf-nav-btn{ padding:8px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:#fff; cursor:pointer; }
     .wf-indicators{ display:flex; gap:6px; margin-left:8px; }
     .wf-dot{ width:10px; height:10px; border-radius:50%; background:#ddd; }
     .wf-dot.active{ background:var(--accent); box-shadow:0 4px 10px rgba(11,116,255,0.18); }
 
-    /* reuse Simon game styles inside slide */
-    .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow: 0 12px 30px rgba(0,0,0,0.18); overflow: visible; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
-    .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-family:inherit; font-size:18px; }
+    /* Simon reuse small */
+    .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow:0 12px 30px rgba(0,0,0,0.18); display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
+    .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-size:18px; }
     .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
     .seg-1{ background: #e74c3c; border-top-right-radius: 100% 100%; }
     .seg-2{ background: #f1c40f; border-bottom-left-radius: 100% 100%; }
     .seg-3{ background: #3498db; border-bottom-right-radius: 100% 100%; }
     .segment.active{ filter: brightness(1.38) saturate(1.1); transform: scale(1.04); box-shadow: 0 14px 28px rgba(0,0,0,0.28); }
-    .center-hole{ position:absolute; width:120px;height:120px; left:50%;top:50%;transform:translate(-50%,-50%); background: #111; color:#fff; border-radius:50%; display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px;box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+    .center-hole{ position:absolute; width:120px;height:120px; left:50%;top:50%;transform:translate(-50%,-50%); background:#111; color:#fff; border-radius:50%; display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+
     .controls{ display:flex; flex-direction:column; gap:8px; align-items:center; }
     .controls .btn{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
     .start-btn{ background: var(--accent); color:#fff; }
     .reset-btn{ background:#444; color:#fff; }
+
     .status{ margin-top:8px; font-weight:800; }
     .rotate-anim{ animation: spin 2.6s linear infinite; }
     @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
 
-    /* placeholder styles for upcoming Walidfares */
-    .placeholder{ min-height:280px; display:flex; align-items:center; justify-content:center; gap:18px; flex-direction:column; color:#333; }
-    .kbd{ font-weight:900; background:#111; color:#fff; padding:6px 10px; border-radius:6px; }
+    /* Walidfare 2 styles */
+    .stack-game-wrap{ display:flex; gap:14px; align-items:flex-start; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+    .canvas-wrap{ background:linear-gradient(#dff3ff,#ffffff); border-radius:8px; padding:10px; box-shadow:0 8px 22px rgba(0,0,0,0.06); }
+    #stackCanvas{ background:#e9f3e9; display:block; border-radius:6px; }
 
-    @media (max-width:900px){ .walidfare-section{ padding:12px; } }
+    .stack-ui{ max-width:320px; display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+    .small-btn{ padding:8px 10px; border-radius:8px; border:none; background:#0b74ff; color:#fff; cursor:pointer; font-weight:700; }
+    .hint{ font-size:14px; color:#333; }
+    .meter{ font-weight:800; margin-top:6px; }
+
+    .success-overlay{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); color:#fff; font-size:22px; font-weight:900; border-radius:8px; }
+
+    @media (max-width:900px){ .walidfare-section{ padding:12px; } .container img{ display:none; } .stack-game-wrap{ flex-direction:column; align-items:center; } }
   </style>
 </head>
 <body>
@@ -76,7 +81,7 @@
     </div>
   </div>
 
-  <!-- WALIDFARE SECTION (carousel of multiple mini-captchas / games) -->
+  <!-- WALIDFARE SECTION -->
   <section class="walidfare-section" aria-label="Walidfare — mini jeux">
     <div class="wf-header">
       <div class="wf-title">Walidfare — Choisis un mini-jeu</div>
@@ -90,13 +95,11 @@
       </div>
     </div>
 
-    <!-- Slide 1 : Simon-like (Walidfare 1) -->
+    <!-- Slide 1 : Simon-like -->
     <div id="wf1" class="wf-slide active" data-index="0">
       <h3>Walidfare 1 — Simon-like</h3>
-      <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes. (Démarrer ci-dessous)</p>
-
+      <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes.</p>
       <div style="display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;">
-        <!-- Simon game area (copied and scoped) -->
         <div>
           <div class="game-area" id="gameArea1" role="application" aria-label="Walidfare 1 Simon">
             <div class="segment seg-0" data-index="0" tabindex="0">1</div>
@@ -113,66 +116,58 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- Slide 2 : Stack boxes (placeholder for Walidfare 2) -->
+    <!-- Slide 2 : Stack boxes (Walidfare 2) -->
     <div id="wf2" class="wf-slide" data-index="1">
-      <h3>Walidfare 2 — Empiler les boîtes (à venir)</h3>
-      <div class="placeholder">
-        <div>Mini-jeu attendu: un chevalier (loubia) doit empiler 5 boîtes avec physiques, les maintenir 10s sans qu'elles tombent.</div>
-        <div>Contrôle: glisser-déposer les boîtes avec la souris. Physique et contraintes à implémenter.</div>
-        <div class="kbd">Prévisualisation: zone de jeu (sera interactive)</div>
+      <h3>Walidfare 2 — Empiler les boîtes (Loubia sauve la princesse)</h3>
+      <p>Glisse-dépose 5 boîtes sur la plateforme (zone cible). Garde-les stables 10 secondes pour sauver la princesse 🌳👸</p>
+
+      <div class="stack-game-wrap">
+        <div class="canvas-wrap" style="position:relative;">
+          <canvas id="stackCanvas" width="720" height="360"></canvas>
+          <div id="successOverlay" class="success-overlay" style="display:none;">
+            👑 La princesse est sauvée ! Le chevalier loubia est heureux 🎉
+          </div>
+        </div>
+
+        <div class="stack-ui">
+          <button id="sgReset" class="small-btn">Réinitialiser le niveau</button>
+          <div class="hint">Déplace une boîte en cliquant-glissant (ou tactile). Empile 5 boîtes dans la zone verte et garde-les stables 10s.</div>
+          <div class="meter">Temps restant stabilité: <span id="stableTimer">10.0</span>s</div>
+          <div class="meter">Boîtes en zone: <span id="inZone">0</span> / 5</div>
+        </div>
       </div>
     </div>
 
-    <!-- Slide 3 : Piano replication (placeholder for Walidfare 3) -->
+    <!-- Slide 3 : Piano (placeholder) -->
     <div id="wf3" class="wf-slide" data-index="2">
       <h3>Walidfare 3 — Piano répète une mélodie (à venir)</h3>
-      <div class="placeholder">
+      <div style="min-height:220px; display:flex;align-items:center;justify-content:center;flex-direction:column;color:#333;">
         <div>Mini-jeu attendu: utiliser les touches QWERTYUIOP (ou affichage piano) pour répéter un morceau.</div>
-        <div>Trois choix de morceaux: 1) Smash Mouth – All Star (début) 2) Rick Astley – Never Gonna Give You Up (passage) 3) On m'appelle l'ovni (refrain).</div>
-        <div class="kbd">Prévisualisation: touches cliquables et zone son</div>
+        <div style="margin-top:10px; font-weight:900;">Choices: All Star / Never Gonna Give You Up / On m'appelle l'ovni</div>
       </div>
     </div>
 
   </section>
 
   <script>
-  // WALIDFARE carousel logic + initialize Walidfare 1 (simon) as before
+  // Carousel
   (function(){
-    // Carousel
     const slides = Array.from(document.querySelectorAll('.wf-slide'));
     const indicators = document.getElementById('wfIndicators');
     let current = 0;
-
-    function renderIndicators(){
-      indicators.innerHTML = '';
-      slides.forEach((s,i)=>{
-        const dot = document.createElement('div'); dot.className='wf-dot'+(i===current? ' active':''); indicators.appendChild(dot);
-      });
-    }
-
-    function showSlide(index){
-      if(index < 0) index = slides.length -1;
-      if(index >= slides.length) index = 0;
-      slides.forEach(s=> s.classList.remove('active'));
-      slides[index].classList.add('active');
-      current = index; renderIndicators();
-    }
-
-    document.getElementById('prevSlide').addEventListener('click', ()=> showSlide(current-1));
-    document.getElementById('nextSlide').addEventListener('click', ()=> showSlide(current+1));
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'ArrowLeft') showSlide(current-1);
-      if(e.key === 'ArrowRight') showSlide(current+1);
-    });
-
+    function renderIndicators(){ indicators.innerHTML=''; slides.forEach((s,i)=>{ const dot=document.createElement('div'); dot.className='wf-dot'+(i===current?' active':''); indicators.appendChild(dot); }); }
+    function showSlide(index){ if(index<0) index=slides.length-1; if(index>=slides.length) index=0; slides.forEach(s=>s.classList.remove('active')); slides[index].classList.add('active'); current=index; renderIndicators(); }
+    document.getElementById('prevSlide').addEventListener('click', ()=>showSlide(current-1));
+    document.getElementById('nextSlide').addEventListener('click', ()=>showSlide(current+1));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowLeft') showSlide(current-1); if(e.key==='ArrowRight') showSlide(current+1); });
     renderIndicators(); showSlide(0);
+  })();
 
-    /* ----------------- Walidfare 1 (Simon) implementation (scoped ids) ----------------- */
+  /* ---------------- Walidfare 1 (Simon) - same as before (scoped) ---------------- */
+  (function(){
     const TOTAL_STEPS = 7;
     const gameArea = document.getElementById('gameArea1');
     const segments = Array.from(gameArea.querySelectorAll('.segment'));
@@ -180,33 +175,307 @@
     const resetBtn = document.getElementById('resetBtn1');
     const stepDisplay = document.getElementById('stepDisplay1');
     const status = document.getElementById('status1');
-
-    let sequence = [];
-    let playerIndex = 0;
-    let currentStep = 0;
-    let playingBack = false;
-    let audioCtx = null;
-    const freqs = [261.6, 329.6, 392.0, 523.3];
-
-    function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } }
-    function beep(freq, duration=220){ ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination); g.gain.value = 0.0001; o.start(); g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02); setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 50); }, duration); }
+    let sequence=[], playerIndex=0, currentStep=0, playingBack=false, audioCtx=null;
+    const freqs=[261.6,329.6,392.0,523.3];
+    function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
+    function beep(freq,duration=220){ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sine'; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination); g.gain.value=0.0001; o.start(); g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime+0.02); setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.02); setTimeout(()=>{ try{o.stop();}catch(e){} },50); }, duration); }
     function randSeq(len){ const arr=[]; for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4)); return arr; }
-    function highlight(index, ms){ const el = segments[index]; el.classList.add('active'); beep(freqs[index], Math.max(120, ms-40)); setTimeout(()=> el.classList.remove('active'), ms); }
-
-    function playback(step){ playingBack = true; playerIndex = 0; status.textContent = 'Écoute...'; if(step >=5) gameArea.classList.add('rotate-anim'); else gameArea.classList.remove('rotate-anim'); const base = Math.max(320, 700 - (step-1)*60); let delay = 400; for(let i=0;i<step;i++){ const idx = sequence[i]; setTimeout(((index, ms)=>()=> highlight(index, ms))(idx, base), delay); delay += base + 160; } setTimeout(()=>{ playingBack = false; gameArea.classList.remove('rotate-anim'); status.textContent = 'À toi'; }, delay + 60); }
-
-    function startGame(){ sequence = randSeq(TOTAL_STEPS); currentStep = 1; stepDisplay.textContent = currentStep; status.textContent = 'Prépare...'; ensureAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); setTimeout(()=> playback(currentStep), 350); }
-    function resetGame(){ sequence = []; currentStep = 0; playerIndex = 0; playingBack = false; stepDisplay.textContent = '—'; status.textContent = 'Réinitialisé'; gameArea.classList.remove('rotate-anim'); }
-
-    function handlePlayerClick(index){ if(playingBack) return; if(currentStep === 0) return; highlight(index, 180); if(index === sequence[playerIndex]){ playerIndex += 1; if(playerIndex === currentStep){ if(currentStep === TOTAL_STEPS){ status.textContent = 'Gagné 🎉'; document.getElementById('status1').textContent = 'Gagné 🎉'; stepDisplay.textContent = '7/7'; currentStep = 0; } else { currentStep +=1; playerIndex = 0; stepDisplay.textContent = currentStep; status.textContent = 'Bien joué — suivant'; setTimeout(()=> playback(currentStep), 700); } } } else { status.textContent = 'Erreur ❌'; setTimeout(()=> beep(120,400), 50); currentStep = 0; } }
-
-    segments.forEach((seg,i)=>{ seg.addEventListener('click', ()=> handlePlayerClick(i)); seg.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); seg.classList.add('active'); setTimeout(()=> seg.classList.remove('active'), 150); handlePlayerClick(i); } }); });
-    startBtn.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); startGame(); });
+    function highlight(index, ms){ const el=segments[index]; el.classList.add('active'); beep(freqs[index], Math.max(120, ms-40)); setTimeout(()=>el.classList.remove('active'), ms); }
+    function playback(step){ playingBack=true; playerIndex=0; status.textContent='Écoute...'; if(step>=5) gameArea.classList.add('rotate-anim'); else gameArea.classList.remove('rotate-anim'); const base=Math.max(320,700-(step-1)*60); let delay=400; for(let i=0;i<step;i++){ const idx=sequence[i]; setTimeout(((index,ms)=>()=>highlight(index,ms))(idx,base), delay); delay+=base+160; } setTimeout(()=>{ playingBack=false; gameArea.classList.remove('rotate-anim'); status.textContent='À toi'; }, delay+60); }
+    function startGame(){ sequence=randSeq(TOTAL_STEPS); currentStep=1; stepDisplay.textContent=currentStep; status.textContent='Prépare...'; ensureAudio(); if(audioCtx.state==='suspended') audioCtx.resume(); setTimeout(()=>playback(currentStep),350); }
+    function resetGame(){ sequence=[]; currentStep=0; playerIndex=0; playingBack=false; stepDisplay.textContent='—'; status.textContent='Réinitialisé'; gameArea.classList.remove('rotate-anim'); }
+    function handlePlayerClick(index){ if(playingBack) return; if(currentStep===0) return; highlight(index,180); if(index===sequence[playerIndex]){ playerIndex+=1; if(playerIndex===currentStep){ if(currentStep===TOTAL_STEPS){ status.textContent='Gagné 🎉'; stepDisplay.textContent='7/7'; currentStep=0; } else { currentStep+=1; playerIndex=0; stepDisplay.textContent=currentStep; status.textContent='Bien joué — suivant'; setTimeout(()=>playback(currentStep),700); } } } else { status.textContent='Erreur ❌'; setTimeout(()=>beep(120,400),50); currentStep=0; } }
+    segments.forEach((seg,i)=>{ seg.addEventListener('click', ()=>handlePlayerClick(i)); seg.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); seg.classList.add('active'); setTimeout(()=>seg.classList.remove('active'),150); handlePlayerClick(i); } }); });
+    startBtn.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); startGame(); });
     resetBtn.addEventListener('click', resetGame);
     resetGame();
+  })();
 
-    // expose small helper to jump to a slide programmatically if needed
-    window.showWalidfare = showSlide;
+  /* ---------------- Walidfare 2: Stack boxes mini-game ---------------- */
+  (function(){
+    const canvas = document.getElementById('stackCanvas');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const W = canvas.width, H = canvas.height;
+
+    // Physics params
+    const gravity = 1100; // px/s^2
+    const friction = 0.98;
+    const groundY = H - 28; // ground y coordinate
+    const platformX = 420, platformW = 200, platformY = groundY - 10; // target platform (zone)
+    const targetZone = { x: platformX, y: platformY - 120, w: platformW, h: 120 };
+
+    // Boxes pool (5) - start at left area
+    const BOX_W = 64, BOX_H = 64;
+    const boxes = [];
+    const initialXs = [40, 40, 40, 40, 40]; // stacked in pool visually
+    for(let i=0;i<5;i++){
+      boxes.push({
+        id: i,
+        x: initialXs[i] + i*2,
+        y: 40 + i*18,
+        w: BOX_W, h: BOX_H,
+        vx:0, vy:0,
+        dragging:false,
+        color: ['#c0392b','#27ae60','#f39c12','#2980b9','#8e44ad'][i],
+        settled: false
+      });
+    }
+
+    // drag state
+    let drag = { box: null, offsetX:0, offsetY:0 };
+    let lastTime = null;
+    let successOverlay = document.getElementById('successOverlay');
+    const stableTimerEl = document.getElementById('stableTimer');
+    const inZoneEl = document.getElementById('inZone');
+    const sgReset = document.getElementById('sgReset');
+
+    // stability tracking: must hold stable 10s
+    let stableCountdown = 10.0;
+    let stabilityActive = false;
+
+    // helper: point in box
+    function pointInBox(x,y,b){ return x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h; }
+
+    // mouse/touch handling
+    function toLocal(e){
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches && e.touches[0]) {
+        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+      } else {
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+    }
+
+    canvas.addEventListener('mousedown', (e)=>{
+      const p = toLocal(e);
+      for(let i=boxes.length-1;i>=0;i--){
+        const b = boxes[i];
+        if(pointInBox(p.x,p.y,b)){
+          drag.box = b;
+          drag.offsetX = p.x - b.x;
+          drag.offsetY = p.y - b.y;
+          b.dragging = true;
+          b.vx = 0; b.vy = 0;
+          // bring to top visually by moving to end of array
+          boxes.splice(i,1);
+          boxes.push(b);
+          break;
+        }
+      }
+    });
+    canvas.addEventListener('touchstart', (e)=>{ e.preventDefault(); const p = toLocal(e); canvas.dispatchEvent(new MouseEvent('mousedown', {clientX: p.x + canvas.getBoundingClientRect().left, clientY: p.y + canvas.getBoundingClientRect().top })); });
+
+    window.addEventListener('mousemove', (e)=>{
+      if(!drag.box) return;
+      const p = toLocal(e);
+      drag.box.x = p.x - drag.offsetX;
+      drag.box.y = p.y - drag.offsetY;
+    });
+    window.addEventListener('touchmove', (e)=>{ e.preventDefault(); if(!drag.box) return; const p = toLocal(e); drag.box.x = p.x - drag.offsetX; drag.box.y = p.y - drag.offsetY; });
+
+    window.addEventListener('mouseup', (e)=>{
+      if(drag.box){
+        drag.box.dragging = false;
+        // small release kick from pointer movement is ignored here (vx stays 0)
+        drag.box = null;
+      }
+    });
+    window.addEventListener('touchend', (e)=>{ if(drag.box){ drag.box.dragging = false; drag.box = null; } });
+
+    // reset function
+    function resetLevel(){
+      successOverlay.style.display = 'none';
+      stableCountdown = 10.0;
+      stabilityActive = false;
+      boxes.forEach((b,i)=>{ b.x = initialXs[i]; b.y = 40 + i*18; b.vx=0; b.vy=0; b.settled=false; });
+      lastTime = null;
+      updateUI();
+    }
+    sgReset.addEventListener('click', resetLevel);
+
+    // collision resolution (simple non-rotational)
+    function resolveCollisions(){
+      // ground collision
+      for(const b of boxes){
+        if(b.dragging) continue;
+        if(b.y + b.h > groundY){
+          b.y = groundY - b.h;
+          b.vy = 0;
+          b.vx *= 0.9;
+        }
+      }
+      // box-box simple stacking: check each pair (naive)
+      // We'll attempt to place boxes on top of others if colliding from above
+      for(let i=0;i<boxes.length;i++){
+        for(let j=0;j<boxes.length;j++){
+          if(i===j) continue;
+          const A = boxes[i], B = boxes[j];
+          if(A === B) continue;
+          if (A.x < B.x + B.w && A.x + A.w > B.x && A.y < B.y + B.h && A.y + A.h > B.y) {
+            // overlap detected, resolve by pushing A up or sideways.
+            const overlapX = Math.min(A.x + A.w - B.x, B.x + B.w - A.x);
+            const overlapY = Math.min(A.y + A.h - B.y, B.y + B.h - A.y);
+            if(overlapY < overlapX){
+              // vertical overlap smaller => separate vertically
+              if(A.y < B.y){
+                // A is above B -> place A on top of B
+                A.y = B.y - A.h;
+                A.vy = 0;
+                A.vx *= 0.9;
+              } else {
+                // A below B -> push A below
+                A.y = B.y + B.h;
+                A.vy = Math.max(0, A.vy);
+              }
+            } else {
+              // horizontal separation
+              if(A.x < B.x) A.x -= overlapX/2;
+              else A.x += overlapX/2;
+              A.vx *= 0.8;
+            }
+          }
+        }
+      }
+    }
+
+    // check if all boxes are within target and settled
+    function checkStability(dt){
+      // boxes considered in zone if their center inside target zone horizontally and top above platform top
+      let countInZone = 0;
+      let allSettled = true;
+      for(const b of boxes){
+        const centerX = b.x + b.w/2;
+        const centerY = b.y + b.h/2;
+        const inZone = (centerX >= targetZone.x && centerX <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6);
+        if(inZone) countInZone++;
+        // settled if small velocities and resting on something (vy approx 0)
+        const velSmall = Math.abs(b.vx) < 6 && Math.abs(b.vy) < 6;
+        const onSomething = (b.y + b.h >= groundY - 0.5) || boxes.some(other => other !== b && Math.abs((b.y + b.h) - other.y) < 1 && Math.abs(b.x - other.x) < b.w);
+        b.settled = velSmall && onSomething;
+        if(!b.settled) allSettled = false;
+      }
+      inZoneEl.textContent = countInZone;
+      // require all boxes in zone and all settled
+      if(countInZone === boxes.length && allSettled){
+        // countdown
+        stabilityActive = true;
+        stableCountdown -= dt;
+        if(stableCountdown < 0) stableCountdown = 0;
+      } else {
+        stabilityActive = false;
+        stableCountdown = 10.0;
+      }
+      stableTimerEl.textContent = stableCountdown.toFixed(1);
+      // success
+      if(stabilityActive && stableCountdown <= 0){
+        successOverlay.style.display = 'flex';
+      }
+    }
+
+    // draw
+    function draw(){
+      ctx.save();
+      ctx.fillStyle = '#eaf4f0';
+      ctx.fillRect(0,0,W,H);
+
+      // draw tree & princess on right
+      // tree trunk
+      ctx.fillStyle = '#7b5a2b';
+      ctx.fillRect(W-120, 36, 20, 60);
+      // tree foliage (simple)
+      ctx.fillStyle = '#2d8f2d';
+      ctx.beginPath();
+      ctx.arc(W-110, 30, 40, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(W-86, 48, 34, 0, Math.PI*2);
+      ctx.fill();
+      // princess icon text
+      ctx.font = '28px serif';
+      ctx.fillStyle = '#000';
+      ctx.fillText('👸', W-110, 22);
+
+      // knight on left
+      ctx.font = '28px serif';
+      ctx.fillText('🛡️', 18, 30);
+      ctx.fillText('🧑‍🌾', 18, 60);
+
+      // draw platform target zone
+      ctx.fillStyle = 'rgba(40,200,120,0.14)';
+      ctx.fillRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h);
+      ctx.strokeStyle = 'rgba(40,200,120,0.5)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h);
+      // small platform graphic
+      ctx.fillStyle = '#6b8f4a';
+      ctx.fillRect(platformX, platformY, platformW, 10);
+
+      // ground
+      ctx.fillStyle = '#574b3b';
+      ctx.fillRect(0, groundY, W, H-groundY);
+
+      // draw boxes
+      for(const b of boxes){
+        ctx.fillStyle = b.color;
+        ctx.fillRect(Math.round(b.x), Math.round(b.y), b.w, b.h);
+        // draw border
+        ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+        ctx.strokeRect(Math.round(b.x)+0.5, Math.round(b.y)+0.5, b.w, b.h);
+      }
+
+      ctx.restore();
+    }
+
+    // physics update
+    function step(t){
+      if(!lastTime) lastTime = t;
+      const dt = Math.min(0.032, (t - lastTime) / 1000); // clamp delta to avoid big jumps
+      lastTime = t;
+
+      // integrate
+      for(const b of boxes){
+        if(b.dragging) continue; // while dragging, position follows mouse
+        // apply gravity
+        b.vy += gravity * dt;
+        // integrate velocity
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        // simple air friction
+        b.vx *= Math.pow(friction, dt*60);
+      }
+
+      // resolve collisions
+      resolveCollisions();
+
+      // check stability & success
+      checkStability(dt);
+
+      // draw
+      draw();
+
+      requestAnimationFrame(step);
+    }
+
+    // start loop
+    requestAnimationFrame(step);
+    // init ui
+    resetLevel();
+
+    // simple helper: if user double-clicks a box in pool => place onto target center
+    canvas.addEventListener('dblclick', (e)=>{
+      const p = toLocal(e);
+      for(let i=0;i<boxes.length;i++){
+        if(pointInBox(p.x,p.y,boxes[i])){
+          boxes[i].x = targetZone.x + (targetZone.w - boxes[i].w)/2;
+          boxes[i].y = targetZone.y + targetZone.h - boxes[i].h;
+          boxes[i].vx = 0; boxes[i].vy = 0;
+          break;
+        }
+      }
+    });
+
+    // accessibility: reset via keyboard R
+    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='r') resetLevel(); });
 
   })();
   </script>
