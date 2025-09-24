@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Présentation Walid — Walidfare</title>
   <style>
-    :root{ --bg:#fff; --text:#222; --accent:#0b74ff; }
+    :root{ --bg:#fff; --text:#222; --accent:#0b74ff; --key-dark:#222; --key-light:#fff; }
     html,body{ height:100%; margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
     body{ margin:24px; transition: background 300ms ease; }
 
@@ -61,7 +61,16 @@
 
     .success-overlay{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); color:#fff; font-size:22px; font-weight:900; border-radius:8px; }
 
-    @media (max-width:900px){ .walidfare-section{ padding:12px; } .container img{ display:none; } .stack-game-wrap{ flex-direction:column; align-items:center; } }
+    /* Walidfare 3 (Piano) */
+    .piano-area{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px; }
+    .piano-keys{ display:flex; gap:6px; align-items:flex-end; justify-content:center; }
+    .key { width:60px; height:160px; border-radius:6px; background:var(--key-light); border:2px solid #222; display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px; cursor:pointer; user-select:none; box-shadow:0 8px 18px rgba(0,0,0,0.08); transition: transform 120ms ease, box-shadow 120ms ease; font-weight:800; font-size:14px; }
+    .key.dark{ background:var(--key-dark); color:#fff; }
+    .key.active { transform: translateY(-6px); box-shadow: 0 18px 32px rgba(0,0,0,0.22); }
+    .piano-controls{ display:flex; gap:8px; align-items:center; }
+    .selector{ padding:8px 10px; border-radius:8px; border:1px solid #ccc; }
+
+    @media (max-width:900px){ .walidfare-section{ padding:12px; } .container img{ display:none; } .stack-game-wrap{ flex-direction:column; align-items:center; } .key{ width:44px; height:120px; } }
   </style>
 </head>
 <body>
@@ -141,12 +150,40 @@
       </div>
     </div>
 
-    <!-- Slide 3 : Piano (placeholder) -->
+    <!-- Slide 3 : Piano (Walidfare 3) -->
     <div id="wf3" class="wf-slide" data-index="2">
-      <h3>Walidfare 3 — Piano répète une mélodie (à venir)</h3>
-      <div style="min-height:220px; display:flex;align-items:center;justify-content:center;flex-direction:column;color:#333;">
-        <div>Mini-jeu attendu: utiliser les touches QWERTYUIOP (ou affichage piano) pour répéter un morceau.</div>
-        <div style="margin-top:10px; font-weight:900;">Choices: All Star / Never Gonna Give You Up / On m'appelle l'ovni</div>
+      <h3>Walidfare 3 — Piano répète une mélodie</h3>
+      <p>Choisis une mélodie, écoute la suite au piano (Q W E R T Y U I O) puis répète-la. Le jeu progresse comme Walidfare 1.</p>
+
+      <div class="piano-area">
+        <div class="piano-controls">
+          <select id="songSelect" class="selector" aria-label="Choisir une mélodie">
+            <option value="1">1 — All Star (Smash Mouth) — début</option>
+            <option value="2">2 — Never Gonna Give You Up (Rick Astley) — passage</option>
+            <option value="3">3 — On m'appelle l'ovni — refrain</option>
+          </select>
+          <button id="pStart" class="wf-btn">Démarrer</button>
+          <button id="pReset" class="wf-nav-btn">Réinitialiser</button>
+          <div style="margin-left:12px; font-weight:800;">Touches: Q W E R T Y U I O</div>
+        </div>
+
+        <div class="piano-keys" id="pianoKeys" role="application" aria-label="Clavier piano">
+          <!-- 9 keys: Q W E R T Y U I O -->
+          <div class="key" data-index="0" data-key="Q">Q<br><small>C4</small></div>
+          <div class="key" data-index="1" data-key="W">W<br><small>D4</small></div>
+          <div class="key" data-index="2" data-key="E">E<br><small>E4</small></div>
+          <div class="key" data-index="3" data-key="R">R<br><small>F4</small></div>
+          <div class="key" data-index="4" data-key="T">T<br><small>G4</small></div>
+          <div class="key" data-index="5" data-key="Y">Y<br><small>A4</small></div>
+          <div class="key" data-index="6" data-key="U">U<br><small>B4</small></div>
+          <div class="key" data-index="7" data-key="I">I<br><small>C5</small></div>
+          <div class="key" data-index="8" data-key="O">O<br><small>D5</small></div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="font-weight:900;">Étapes: <span id="pStep">—</span></div>
+          <div style="font-weight:900;">Statut: <span id="pStatus">Prêt</span></div>
+        </div>
       </div>
     </div>
 
@@ -166,7 +203,7 @@
     renderIndicators(); showSlide(0);
   })();
 
-  /* ---------------- Walidfare 1 (Simon) - same as before (scoped) ---------------- */
+  /* ---------------- Walidfare 1 (Simon) ---------------- */
   (function(){
     const TOTAL_STEPS = 7;
     const gameArea = document.getElementById('gameArea1');
@@ -196,286 +233,191 @@
     const canvas = document.getElementById('stackCanvas');
     const ctx = canvas.getContext('2d', { alpha: false });
     const W = canvas.width, H = canvas.height;
-
-    // Physics params
-    const gravity = 1100; // px/s^2
+    const gravity = 1100;
     const friction = 0.98;
-    const groundY = H - 28; // ground y coordinate
-    const platformX = 420, platformW = 200, platformY = groundY - 10; // target platform (zone)
+    const groundY = H - 28;
+    const platformX = 420, platformW = 200, platformY = groundY - 10;
     const targetZone = { x: platformX, y: platformY - 120, w: platformW, h: 120 };
-
-    // Boxes pool (5) - start at left area
     const BOX_W = 64, BOX_H = 64;
     const boxes = [];
-    const initialXs = [40, 40, 40, 40, 40]; // stacked in pool visually
+    const initialXs = [40, 40, 40, 40, 40];
     for(let i=0;i<5;i++){
-      boxes.push({
-        id: i,
-        x: initialXs[i] + i*2,
-        y: 40 + i*18,
-        w: BOX_W, h: BOX_H,
-        vx:0, vy:0,
-        dragging:false,
-        color: ['#c0392b','#27ae60','#f39c12','#2980b9','#8e44ad'][i],
-        settled: false
-      });
+      boxes.push({ id:i, x: initialXs[i], y: 40 + i*18, w: BOX_W, h: BOX_H, vx:0, vy:0, dragging:false, color: ['#c0392b','#27ae60','#f39c12','#2980b9','#8e44ad'][i], settled:false });
     }
-
-    // drag state
     let drag = { box: null, offsetX:0, offsetY:0 };
     let lastTime = null;
     let successOverlay = document.getElementById('successOverlay');
     const stableTimerEl = document.getElementById('stableTimer');
     const inZoneEl = document.getElementById('inZone');
     const sgReset = document.getElementById('sgReset');
-
-    // stability tracking: must hold stable 10s
     let stableCountdown = 10.0;
     let stabilityActive = false;
-
-    // helper: point in box
     function pointInBox(x,y,b){ return x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h; }
-
-    // mouse/touch handling
-    function toLocal(e){
-      const rect = canvas.getBoundingClientRect();
-      if (e.touches && e.touches[0]) {
-        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-      } else {
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      }
-    }
-
-    canvas.addEventListener('mousedown', (e)=>{
-      const p = toLocal(e);
-      for(let i=boxes.length-1;i>=0;i--){
-        const b = boxes[i];
-        if(pointInBox(p.x,p.y,b)){
-          drag.box = b;
-          drag.offsetX = p.x - b.x;
-          drag.offsetY = p.y - b.y;
-          b.dragging = true;
-          b.vx = 0; b.vy = 0;
-          // bring to top visually by moving to end of array
-          boxes.splice(i,1);
-          boxes.push(b);
-          break;
-        }
-      }
-    });
+    function toLocal(e){ const rect = canvas.getBoundingClientRect(); if (e.touches && e.touches[0]) { return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top }; } else { return { x: e.clientX - rect.left, y: e.clientY - rect.top }; } }
+    canvas.addEventListener('mousedown', (e)=>{ const p = toLocal(e); for(let i=boxes.length-1;i>=0;i--){ const b = boxes[i]; if(pointInBox(p.x,p.y,b)){ drag.box = b; drag.offsetX = p.x - b.x; drag.offsetY = p.y - b.y; b.dragging = true; b.vx = 0; b.vy = 0; boxes.splice(i,1); boxes.push(b); break; } } });
     canvas.addEventListener('touchstart', (e)=>{ e.preventDefault(); const p = toLocal(e); canvas.dispatchEvent(new MouseEvent('mousedown', {clientX: p.x + canvas.getBoundingClientRect().left, clientY: p.y + canvas.getBoundingClientRect().top })); });
-
-    window.addEventListener('mousemove', (e)=>{
-      if(!drag.box) return;
-      const p = toLocal(e);
-      drag.box.x = p.x - drag.offsetX;
-      drag.box.y = p.y - drag.offsetY;
-    });
+    window.addEventListener('mousemove', (e)=>{ if(!drag.box) return; const p = toLocal(e); drag.box.x = p.x - drag.offsetX; drag.box.y = p.y - drag.offsetY; });
     window.addEventListener('touchmove', (e)=>{ e.preventDefault(); if(!drag.box) return; const p = toLocal(e); drag.box.x = p.x - drag.offsetX; drag.box.y = p.y - drag.offsetY; });
-
-    window.addEventListener('mouseup', (e)=>{
-      if(drag.box){
-        drag.box.dragging = false;
-        // small release kick from pointer movement is ignored here (vx stays 0)
-        drag.box = null;
-      }
-    });
+    window.addEventListener('mouseup', (e)=>{ if(drag.box){ drag.box.dragging = false; drag.box = null; } });
     window.addEventListener('touchend', (e)=>{ if(drag.box){ drag.box.dragging = false; drag.box = null; } });
-
-    // reset function
-    function resetLevel(){
-      successOverlay.style.display = 'none';
-      stableCountdown = 10.0;
-      stabilityActive = false;
-      boxes.forEach((b,i)=>{ b.x = initialXs[i]; b.y = 40 + i*18; b.vx=0; b.vy=0; b.settled=false; });
-      lastTime = null;
-      updateUI();
-    }
+    function resetLevel(){ successOverlay.style.display = 'none'; stableCountdown = 10.0; stabilityActive = false; boxes.forEach((b,i)=>{ b.x = initialXs[i]; b.y = 40 + i*18; b.vx=0; b.vy=0; b.settled=false; }); lastTime = null; updateUI(); }
+    function updateUI(){ stableTimerEl.textContent = stableCountdown.toFixed(1); inZoneEl.textContent = boxes.filter(b=> (b.x + b.w/2) >= targetZone.x && (b.x + b.w/2) <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6 ).length; }
     sgReset.addEventListener('click', resetLevel);
+    function resolveCollisions(){ for(const b of boxes){ if(b.dragging) continue; if(b.y + b.h > groundY){ b.y = groundY - b.h; b.vy = 0; b.vx *= 0.9; } } for(let i=0;i<boxes.length;i++){ for(let j=0;j<boxes.length;j++){ if(i===j) continue; const A = boxes[i], B = boxes[j]; if (A.x < B.x + B.w && A.x + A.w > B.x && A.y < B.y + B.h && A.y + A.h > B.y) { const overlapX = Math.min(A.x + A.w - B.x, B.x + B.w - A.x); const overlapY = Math.min(A.y + A.h - B.y, B.y + B.h - A.y); if(overlapY < overlapX){ if(A.y < B.y){ A.y = B.y - A.h; A.vy = 0; A.vx *= 0.9; } else { A.y = B.y + B.h; A.vy = Math.max(0, A.vy); } } else { if(A.x < B.x) A.x -= overlapX/2; else A.x += overlapX/2; A.vx *= 0.8; } } } } }
+    function checkStability(dt){ let countInZone = 0; let allSettled = true; for(const b of boxes){ const centerX = b.x + b.w/2; const inZone = (centerX >= targetZone.x && centerX <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6); if(inZone) countInZone++; const velSmall = Math.abs(b.vx) < 6 && Math.abs(b.vy) < 6; const onSomething = (b.y + b.h >= groundY - 0.5) || boxes.some(other => other !== b && Math.abs((b.y + b.h) - other.y) < 1 && Math.abs(b.x - other.x) < b.w); b.settled = velSmall && onSomething; if(!b.settled) allSettled = false; } inZoneEl.textContent = countInZone; if(countInZone === boxes.length && allSettled){ stabilityActive = true; stableCountdown -= dt; if(stableCountdown < 0) stableCountdown = 0; } else { stabilityActive = false; stableCountdown = 10.0; } stableTimerEl.textContent = stableCountdown.toFixed(1); if(stabilityActive && stableCountdown <= 0){ successOverlay.style.display = 'flex'; } }
+    function draw(){ ctx.save(); ctx.fillStyle = '#eaf4f0'; ctx.fillRect(0,0,W,H); ctx.fillStyle = '#7b5a2b'; ctx.fillRect(W-120, 36, 20, 60); ctx.fillStyle = '#2d8f2d'; ctx.beginPath(); ctx.arc(W-110, 30, 40, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(W-86, 48, 34, 0, Math.PI*2); ctx.fill(); ctx.font = '28px serif'; ctx.fillStyle = '#000'; ctx.fillText('👸', W-110, 22); ctx.font = '28px serif'; ctx.fillText('🛡️', 18, 30); ctx.fillText('🧑‍🌾', 18, 60); ctx.fillStyle = 'rgba(40,200,120,0.14)'; ctx.fillRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h); ctx.strokeStyle = 'rgba(40,200,120,0.5)'; ctx.lineWidth = 2; ctx.strokeRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h); ctx.fillStyle = '#6b8f4a'; ctx.fillRect(platformX, platformY, platformW, 10); ctx.fillStyle = '#574b3b'; ctx.fillRect(0, groundY, W, H-groundY); for(const b of boxes){ ctx.fillStyle = b.color; ctx.fillRect(Math.round(b.x), Math.round(b.y), b.w, b.h); ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.strokeRect(Math.round(b.x)+0.5, Math.round(b.y)+0.5, b.w, b.h); } ctx.restore(); }
+    let running = true;
+    function step(t){ if(!lastTime) lastTime = t; const dt = Math.min(0.032, (t - lastTime) / 1000); lastTime = t; for(const b of boxes){ if(b.dragging) continue; b.vy += gravity * dt; b.x += b.vx * dt; b.y += b.vy * dt; b.vx *= Math.pow(friction, dt*60); } resolveCollisions(); checkStability(dt); draw(); if(running) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+    resetLevel();
+    canvas.addEventListener('dblclick', (e)=>{ const p = toLocal(e); for(let i=0;i<boxes.length;i++){ if(pointInBox(p.x,p.y,boxes[i])){ boxes[i].x = targetZone.x + (targetZone.w - boxes[i].w)/2; boxes[i].y = targetZone.y + targetZone.h - boxes[i].h; boxes[i].vx = 0; boxes[i].vy = 0; break; } } });
+    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='r') resetLevel(); });
+  })();
 
-    // collision resolution (simple non-rotational)
-    function resolveCollisions(){
-      // ground collision
-      for(const b of boxes){
-        if(b.dragging) continue;
-        if(b.y + b.h > groundY){
-          b.y = groundY - b.h;
-          b.vy = 0;
-          b.vx *= 0.9;
-        }
+  /* ---------------- Walidfare 3: Piano Simon-like ---------------- */
+  (function(){
+    // Key mapping: Q W E R T Y U I O => indices 0..8
+    const keyElems = Array.from(document.querySelectorAll('#pianoKeys .key'));
+    const pStart = document.getElementById('pStart');
+    const pReset = document.getElementById('pReset');
+    const songSelect = document.getElementById('songSelect');
+    const pStep = document.getElementById('pStep');
+    const pStatus = document.getElementById('pStatus');
+
+    // note frequencies for keys C4..D5
+    const freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33];
+
+    // Three melodies (arrays of indices) - short 8-note sequences used as the target melody
+    const melodies = {
+      '1': [4,4,5,6,7,6,5,4],     // All Star - simplified riff
+      '2': [5,5,4,3,4,5,7,6],     // Rick Astley - simplified passage
+      '3': [2,3,4,5,4,3,2,1]      // On m'appelle l'ovni - simplified refrain
+    };
+
+    const TOTAL_STEPS = 8; // length of each melody
+    let chosen = '1';
+    let sequence = [];
+    let currentStep = 0;
+    let playerIndex = 0;
+    let playingBack = false;
+    let audioCtx = null;
+
+    function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    function tone(freq, duration=240){
+      ensureAudio();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      o.connect(g); g.connect(audioCtx.destination);
+      g.gain.value = 0.0001;
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.02);
+      setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02); setTimeout(()=>{ try{o.stop(); }catch(e){} }, 60); }, duration);
+    }
+
+    function highlightKey(idx, ms){
+      const el = keyElems[idx];
+      if(!el) return;
+      el.classList.add('active');
+      tone(freqs[idx], Math.max(120, ms-40));
+      setTimeout(()=> el.classList.remove('active'), ms);
+    }
+
+    function setChosen(val){ chosen = val; pStatus.textContent = 'Prêt'; pStep.textContent = '—'; }
+
+    songSelect.addEventListener('change', (e)=> setChosen(e.target.value) );
+
+    function startPiano(){
+      // use the chosen melody as the sequence
+      sequence = melodies[chosen].slice(); // copy
+      currentStep = 1;
+      playerIndex = 0;
+      pStep.textContent = currentStep + ' / ' + TOTAL_STEPS;
+      pStatus.textContent = 'Écoute...';
+      ensureAudio();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+      setTimeout(()=> playback(currentStep), 300);
+    }
+
+    function resetPiano(){
+      sequence = [];
+      currentStep = 0;
+      playerIndex = 0;
+      playingBack = false;
+      pStep.textContent = '—';
+      pStatus.textContent = 'Réinitialisé';
+    }
+
+    function playback(step){
+      playingBack = true;
+      playerIndex = 0;
+      pStatus.textContent = 'Écoute...';
+      const base = Math.max(220, 420 - (step-1)*20); // slightly faster each step
+      let delay = 260;
+      for(let i=0;i<step;i++){
+        const idx = sequence[i];
+        setTimeout(((index,ms)=>()=> highlightKey(index,ms))(idx, base), delay);
+        delay += base + 120;
       }
-      // box-box simple stacking: check each pair (naive)
-      // We'll attempt to place boxes on top of others if colliding from above
-      for(let i=0;i<boxes.length;i++){
-        for(let j=0;j<boxes.length;j++){
-          if(i===j) continue;
-          const A = boxes[i], B = boxes[j];
-          if(A === B) continue;
-          if (A.x < B.x + B.w && A.x + A.w > B.x && A.y < B.y + B.h && A.y + A.h > B.y) {
-            // overlap detected, resolve by pushing A up or sideways.
-            const overlapX = Math.min(A.x + A.w - B.x, B.x + B.w - A.x);
-            const overlapY = Math.min(A.y + A.h - B.y, B.y + B.h - A.y);
-            if(overlapY < overlapX){
-              // vertical overlap smaller => separate vertically
-              if(A.y < B.y){
-                // A is above B -> place A on top of B
-                A.y = B.y - A.h;
-                A.vy = 0;
-                A.vx *= 0.9;
-              } else {
-                // A below B -> push A below
-                A.y = B.y + B.h;
-                A.vy = Math.max(0, A.vy);
-              }
-            } else {
-              // horizontal separation
-              if(A.x < B.x) A.x -= overlapX/2;
-              else A.x += overlapX/2;
-              A.vx *= 0.8;
-            }
+      setTimeout(()=>{ playingBack = false; pStatus.textContent = 'À toi'; }, delay + 40);
+    }
+
+    function handleInput(idx){
+      if(playingBack) return;
+      if(currentStep === 0) return;
+      highlightKey(idx, 180);
+      if(idx === sequence[playerIndex]){
+        playerIndex += 1;
+        if(playerIndex === currentStep){
+          if(currentStep === TOTAL_STEPS){
+            pStatus.textContent = 'Gagné 🎹🎉';
+            pStep.textContent = TOTAL_STEPS + ' / ' + TOTAL_STEPS;
+            currentStep = 0;
+          } else {
+            currentStep += 1;
+            playerIndex = 0;
+            pStep.textContent = currentStep + ' / ' + TOTAL_STEPS;
+            pStatus.textContent = 'Bien joué — suivant';
+            setTimeout(()=> playback(currentStep), 700);
           }
         }
-      }
-    }
-
-    // check if all boxes are within target and settled
-    function checkStability(dt){
-      // boxes considered in zone if their center inside target zone horizontally and top above platform top
-      let countInZone = 0;
-      let allSettled = true;
-      for(const b of boxes){
-        const centerX = b.x + b.w/2;
-        const centerY = b.y + b.h/2;
-        const inZone = (centerX >= targetZone.x && centerX <= targetZone.x + targetZone.w && b.y + b.h <= targetZone.y + targetZone.h + 6);
-        if(inZone) countInZone++;
-        // settled if small velocities and resting on something (vy approx 0)
-        const velSmall = Math.abs(b.vx) < 6 && Math.abs(b.vy) < 6;
-        const onSomething = (b.y + b.h >= groundY - 0.5) || boxes.some(other => other !== b && Math.abs((b.y + b.h) - other.y) < 1 && Math.abs(b.x - other.x) < b.w);
-        b.settled = velSmall && onSomething;
-        if(!b.settled) allSettled = false;
-      }
-      inZoneEl.textContent = countInZone;
-      // require all boxes in zone and all settled
-      if(countInZone === boxes.length && allSettled){
-        // countdown
-        stabilityActive = true;
-        stableCountdown -= dt;
-        if(stableCountdown < 0) stableCountdown = 0;
       } else {
-        stabilityActive = false;
-        stableCountdown = 10.0;
-      }
-      stableTimerEl.textContent = stableCountdown.toFixed(1);
-      // success
-      if(stabilityActive && stableCountdown <= 0){
-        successOverlay.style.display = 'flex';
+        pStatus.textContent = 'Erreur ❌';
+        // negative beep
+        try{ tone(120, 400); }catch(e){}
+        currentStep = 0;
       }
     }
 
-    // draw
-    function draw(){
-      ctx.save();
-      ctx.fillStyle = '#eaf4f0';
-      ctx.fillRect(0,0,W,H);
+    // click on keys
+    keyElems.forEach((el, i)=>{
+      el.addEventListener('click', ()=> handleInput(i) );
+      // keyboard focus support
+      el.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); el.classList.add('active'); setTimeout(()=> el.classList.remove('active'), 120); handleInput(i); } });
+    });
 
-      // draw tree & princess on right
-      // tree trunk
-      ctx.fillStyle = '#7b5a2b';
-      ctx.fillRect(W-120, 36, 20, 60);
-      // tree foliage (simple)
-      ctx.fillStyle = '#2d8f2d';
-      ctx.beginPath();
-      ctx.arc(W-110, 30, 40, 0, Math.PI*2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(W-86, 48, 34, 0, Math.PI*2);
-      ctx.fill();
-      // princess icon text
-      ctx.font = '28px serif';
-      ctx.fillStyle = '#000';
-      ctx.fillText('👸', W-110, 22);
-
-      // knight on left
-      ctx.font = '28px serif';
-      ctx.fillText('🛡️', 18, 30);
-      ctx.fillText('🧑‍🌾', 18, 60);
-
-      // draw platform target zone
-      ctx.fillStyle = 'rgba(40,200,120,0.14)';
-      ctx.fillRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h);
-      ctx.strokeStyle = 'rgba(40,200,120,0.5)';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(targetZone.x, targetZone.y, targetZone.w, targetZone.h);
-      // small platform graphic
-      ctx.fillStyle = '#6b8f4a';
-      ctx.fillRect(platformX, platformY, platformW, 10);
-
-      // ground
-      ctx.fillStyle = '#574b3b';
-      ctx.fillRect(0, groundY, W, H-groundY);
-
-      // draw boxes
-      for(const b of boxes){
-        ctx.fillStyle = b.color;
-        ctx.fillRect(Math.round(b.x), Math.round(b.y), b.w, b.h);
-        // draw border
-        ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-        ctx.strokeRect(Math.round(b.x)+0.5, Math.round(b.y)+0.5, b.w, b.h);
-      }
-
-      ctx.restore();
-    }
-
-    // physics update
-    function step(t){
-      if(!lastTime) lastTime = t;
-      const dt = Math.min(0.032, (t - lastTime) / 1000); // clamp delta to avoid big jumps
-      lastTime = t;
-
-      // integrate
-      for(const b of boxes){
-        if(b.dragging) continue; // while dragging, position follows mouse
-        // apply gravity
-        b.vy += gravity * dt;
-        // integrate velocity
-        b.x += b.vx * dt;
-        b.y += b.vy * dt;
-        // simple air friction
-        b.vx *= Math.pow(friction, dt*60);
-      }
-
-      // resolve collisions
-      resolveCollisions();
-
-      // check stability & success
-      checkStability(dt);
-
-      // draw
-      draw();
-
-      requestAnimationFrame(step);
-    }
-
-    // start loop
-    requestAnimationFrame(step);
-    // init ui
-    resetLevel();
-
-    // simple helper: if user double-clicks a box in pool => place onto target center
-    canvas.addEventListener('dblclick', (e)=>{
-      const p = toLocal(e);
-      for(let i=0;i<boxes.length;i++){
-        if(pointInBox(p.x,p.y,boxes[i])){
-          boxes[i].x = targetZone.x + (targetZone.w - boxes[i].w)/2;
-          boxes[i].y = targetZone.y + targetZone.h - boxes[i].h;
-          boxes[i].vx = 0; boxes[i].vy = 0;
-          break;
-        }
+    // keyboard mapping Q W E R T Y U I O
+    const keyMap = { 'q':0,'w':1,'e':2,'r':3,'t':4,'y':5,'u':6,'i':7,'o':8 };
+    window.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase();
+      if(keyMap.hasOwnProperty(k)){
+        // prevent interfering with other controls
+        if(document.activeElement && document.activeElement.tagName === 'INPUT') return;
+        const idx = keyMap[k];
+        // visual & input
+        // allow starting audio context via first interaction
+        if(!audioCtx) ensureAudio();
+        handleInput(idx);
       }
     });
 
-    // accessibility: reset via keyboard R
-    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='r') resetLevel(); });
+    pStart.addEventListener('click', ()=>{ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); startPiano(); });
+    pReset.addEventListener('click', resetPiano);
+
+    // init
+    setChosen(songSelect.value);
+    resetPiano();
 
   })();
   </script>
