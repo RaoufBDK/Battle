@@ -2,20 +2,18 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Présentation Walid</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Présentation Walid — Faux CAPTCHA</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
+    :root{ --bg:#fff; --text:#222; --accent:#0b74ff; }
+    html,body{ height:100%; margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
+    body{ margin:40px; transition: background 300ms ease; }
 
     .container {
       display: flex;
       justify-content: center; 
       align-items: center;
       gap: 40px; 
-       
     }
 
     .container img {
@@ -23,17 +21,15 @@
       height: 400px;
       object-fit: cover;
       border-radius: 10px;
-      box-shadow: 0 9px 12px rgba(0,0,0,0.4); 
+      box-shadow: 0 9px 12px rgba(0,0,0,0.4);
     }
 
     .texte {
       width: 200px; 
       text-align: justify;
-
     }
 
-
-.icone-retour {
+    .icone-retour {
       position: fixed;
       top: 15px;
       left: 15px;
@@ -44,44 +40,317 @@
       z-index: 1000;
     }
 
-    .icone-retour:hover {
-      transform: scale(1.2);
+    .icone-retour:hover { transform: scale(1.2); }
+
+   
+    .captcha-wrap{
+      max-width: 760px;
+      margin: 30px auto 0;
+      display:flex;
+      gap:28px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
     }
 
+    .game-area{
+      width: 360px;
+      height: 360px;
+      position: relative;
+      border-radius: 50%;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+      overflow: visible;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr;
+      transition: transform 350ms ease;
+    }
 
+    .segment{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease;
+      font-weight:700;
+      color:rgba(255,255,255,0.95);
+      font-family:inherit;
+      font-size:18px;
+    }
 
+    .segment::after{ content:''; position:absolute; inset:0; border-radius:0; }
 
+    .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
+    .seg-1{ background: #e74c3c; border-top-right-radius: 100% 100%; }
+    .seg-2{ background: #f1c40f; border-bottom-left-radius: 100% 100%; }
+    .seg-3{ background: #3498db; border-bottom-right-radius: 100% 100%; }
 
+    
+    .seg-0, .seg-1, .seg-2, .seg-3{
+      clip-path: polygon(50% 50%, 0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    .segment.active{
+      filter: brightness(1.38) saturate(1.1);
+      transform: scale(1.04);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+    }
+
+    .center-hole{
+      position:absolute;
+      width:140px;height:140px;
+      left:50%;top:50%;transform:translate(-50%,-50%);
+      background: #111; color:#fff; border-radius:50%;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;padding:10px;box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .controls{ display:flex; flex-direction:column; gap:8px; align-items:center; }
+    .controls .btn{ padding:10px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
+    .start-btn{ background: var(--accent); color:#fff; }
+    .reset-btn{ background:#444; color:#fff; }
+
+    .info{ font-size:14px; text-align:center; }
+
+    .status{ margin-top:10px; font-weight:800; }
+
+    
+    .rotate-anim{ animation: spin 2.6s linear infinite; }
+    @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
+
+ 
+    .message{ margin-top:12px; font-weight:800; color:#222; }
+
+  
+    @media (max-width:700px){
+      .container{ flex-direction:column; gap:16px; }
+      .captcha-wrap{ gap:14px; }
+    }
   </style>
 </head>
-
 <body>
-<a href="../index.html" class="icone-retour">🛡️</a>
-
+  <a href="../index.html" class="icone-retour">🛡️</a>
 
   <div class="container">
     <div class="texte">
       <h2>Déscription</h2>
-      <p>
-     un jeune aventurier en quête d'histoire à raconter 
-      </p>
+      <p>un jeune aventurier en quête d'histoire à raconter</p>
     </div>
 
     <img src="../walid.jpg" alt="Walid" />
 
     <div class="texte">
       <h2>difficulté:</h2>
-       
-    <p style="font-size: 24px;">⭐</p>
-
-
+      <p style="font-size: 24px;">⭐</p>
     </div>
   </div>
 
 
+  <div class="captcha-wrap" aria-live="polite">
+    <div class="game-area" id="gameArea" role="application" aria-label="Faux captcha de mémorisation">
+      <div class="segment seg-0" data-index="0" aria-label="couleur 1" tabindex="0">1</div>
+      <div class="segment seg-1" data-index="1" aria-label="couleur 2" tabindex="0">2</div>
+      <div class="segment seg-2" data-index="2" aria-label="couleur 3" tabindex="0">3</div>
+      <div class="segment seg-3" data-index="3" aria-label="couleur 4" tabindex="0">4</div>
 
+      <div class="center-hole">
+        <div class="controls">
+          <button id="startBtn" class="btn start-btn">Démarrer le faux CAPTCHA</button>
+          <button id="resetBtn" class="btn reset-btn">Réinitialiser</button>
+        </div>
+        <div class="info">Étapes: <span id="stepDisplay">—</span> / 7</div>
+        <div class="status" id="status">Prêt</div>
+      </div>
+    </div>
 
+    <div style="max-width:320px;">
+      <h3>Mode d'emploi</h3>
+      <p>Observe la séquence de flashes (accompagnés de bips) puis reproduis-la en cliquant sur les segments dans le même ordre. Le jeu fait 7 étapes et devient de plus en plus rapide. À la 5ᵉ étape le cercle tourne pendant la lecture.</p>
+      <div class="message" id="message"></div>
+    </div>
+  </div>
 
+  <script>
+  (function(){
+    const TOTAL_STEPS = 7;
+    const gameArea = document.getElementById('gameArea');
+    const segments = Array.from(document.querySelectorAll('.segment'));
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const stepDisplay = document.getElementById('stepDisplay');
+    const status = document.getElementById('status');
+    const message = document.getElementById('message');
+
+    let sequence = [];
+    let playerIndex = 0;
+    let currentStep = 0; 
+    let playingBack = false;
+    let audioCtx = null;
+
+    
+    const freqs = [261.6, 329.6, 392.0, 523.3];
+
+    function ensureAudio(){
+      if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function beep(freq, duration=220){
+      ensureAudio();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      g.gain.value = 0.0001;
+      o.start();
+      
+      g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02);
+    
+      setTimeout(()=>{
+        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.02);
+        setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 50);
+      }, duration);
+    }
+
+    function randSeq(len){
+      const arr = [];
+      for(let i=0;i<len;i++) arr.push(Math.floor(Math.random()*4));
+      return arr;
+    }
+
+    function highlight(index, ms){
+      const el = segments[index];
+      el.classList.add('active');
+      beep(freqs[index], Math.max(120, ms-40));
+      setTimeout(()=> el.classList.remove('active'), ms);
+    }
+
+    function playback(step){
+      playingBack = true;
+      playerIndex = 0;
+      status.textContent = 'Écoute...';
+      message.textContent = '';
+
+      
+      if(step >= 5){
+        gameArea.classList.add('rotate-anim');
+      } else {
+        gameArea.classList.remove('rotate-anim');
+      }
+
+      
+      const base = Math.max(320, 700 - (step-1)*60);
+      let delay = 400; 
+      for(let i=0;i<step;i++){
+        const idx = sequence[i];
+       
+        setTimeout(((index, ms)=>()=> highlight(index, ms))(idx, base), delay);
+        delay += base + 160; 
+      }
+     
+      setTimeout(()=>{
+        playingBack = false;
+        gameArea.classList.remove('rotate-anim');
+        status.textContent = 'À toi';
+      }, delay + 60);
+    }
+
+    function startGame(){
+      sequence = randSeq(TOTAL_STEPS);
+      currentStep = 1;
+      stepDisplay.textContent = currentStep;
+      message.textContent = '';
+      status.textContent = 'Prépare...';
+      
+      ensureAudio();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+      setTimeout(()=> playback(currentStep), 350);
+    }
+
+    function resetGame(){
+      sequence = [];
+      currentStep = 0;
+      playerIndex = 0;
+      playingBack = false;
+      stepDisplay.textContent = '—';
+      status.textContent = 'Réinitialisé';
+      message.textContent = '';
+      gameArea.classList.remove('rotate-anim');
+    }
+
+    function handlePlayerClick(index){
+      if(playingBack) return; 
+      if(currentStep === 0) return; 
+
+     
+      highlight(index, 180);
+
+      if(index === sequence[playerIndex]){
+        playerIndex += 1;
+        if(playerIndex === currentStep){
+       
+          if(currentStep === TOTAL_STEPS){
+         
+            status.textContent = 'Gagné 🎉';
+            message.textContent = 'Bravo ! Tu as terminé les 7 étapes.';
+            currentStep = 0; 
+          } else {
+           
+            currentStep += 1;
+            playerIndex = 0;
+            stepDisplay.textContent = currentStep;
+            status.textContent = 'Bien joué — suivant';
+           
+            setTimeout(()=> playback(currentStep), 700);
+          }
+        }
+      } else {
+        
+        status.textContent = 'Erreur ❌';
+        message.textContent = 'Mauvaise séquence — réessaie (réinitialise si tu veux).';
+        
+        beep(120, 400);
+        currentStep = 0;
+      }
+    }
+
+   
+    segments.forEach((seg, i)=>{
+      seg.addEventListener('click', ()=> handlePlayerClick(i));
+      
+      seg.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'Enter' || ev.key === ' '){
+          ev.preventDefault();
+          seg.classList.add('active');
+          setTimeout(()=> seg.classList.remove('active'), 150);
+          handlePlayerClick(i);
+        }
+      });
+    });
+
+    startBtn.addEventListener('click', ()=>{
+      if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      startGame();
+    });
+
+    resetBtn.addEventListener('click', resetGame);
+
+ 
+    resetGame();
+
+    
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 's' && (e.ctrlKey || e.metaKey)){
+     
+        e.preventDefault(); startGame();
+      }
+    });
+
+  })();
+  </script>
 </body>
 </html>
-
