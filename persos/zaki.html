@@ -47,7 +47,7 @@
 
     .icone-retour:hover { transform: scale(1.2); }
 
-    /* Le bouton magique */
+
     .magic-btn{
       position: relative;
       display: inline-block;
@@ -63,19 +63,19 @@
       z-index: 900;
     }
 
-    /* état après premier clic (s'échappe vers le haut) */
+  
     .magic-btn.escaped{
       position: fixed;
-      top: 18px; /* en haut de la page */
+      top: 18px; 
       right: 20px;
       transform: translateY(-6px) scale(0.98);
       background:#444;
     }
 
-    /* survol paresseux */
+   
     .magic-btn:hover{ transform: translateY(-4px) scale(1.02); }
 
-    /* écran final */
+   
     .final-overlay{
       position: fixed;
       inset: 0;
@@ -102,7 +102,7 @@
       box-shadow: 0 8px 18px rgba(11,116,255,0.2);
     }
 
-    /* cache le contenu lorsque l'overlay est actif */
+   
     .hidden{ visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 300ms ease; }
 
   </style>
@@ -125,7 +125,7 @@
         <h2>difficulté:</h2>
         <p style="font-size: 24px;">⭐⭐⭐⭐⭐⭐</p>
 
-        <!-- Bouton demandé -->
+     
         <div style="margin-top:18px;">
           <button id="docBtn" class="magic-btn">Clique ici si tu veux voir un documentaire</button>
         </div>
@@ -144,20 +144,19 @@
         clicks += 1;
 
         if(clicks === 1){
-          // Premier clic : le bouton "s'échappe" vers le haut et change de texte
+          
           btn.classList.add('escaped');
           btn.textContent = "Vaut mieux pas";
 
-          // Optionnel : petit déplacement latéral aléatoire pour donner l'effet d'échappement
+         
           const offset = (Math.random() > 0.5) ? 10 : -10;
           btn.style.right = (20 + offset) + 'px';
 
         } else if(clicks === 2){
-          // Deuxième clic : afficher l'écran final sombre
-          // on masque le contenu principal pour éviter les éléments visibles dessous
+       
           main.classList.add('hidden');
 
-          // créer overlay final
+          
           const overlay = document.createElement('div');
           overlay.className = 'final-overlay';
           overlay.innerHTML = `
@@ -167,13 +166,11 @@
 
           document.body.appendChild(overlay);
 
-          // pour s'assurer que le fond de page devient bien noir (au cas où)
+          
           document.body.style.background = '#000';
         }
       });
 
-      // sécurité : si l'utilisateur clique très vite plusieurs fois, on garde la logique simple
-      // on pourrait réinitialiser clicks si besoin; pour l'instant on ignore les clics >2
 
     })();
   </script>
