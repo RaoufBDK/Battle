@@ -1,14 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Présentation Walid</title>
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    :root{ --blue:#0b74ff; --red:#ff2b2b; }
+    html,body{ height:100%; margin:0; font-family: Arial, sans-serif; }
+    body{
+      background: #fff;
       margin: 40px;
+      color:#222;
+      transition: background 400ms ease;
     }
 
     .container {
@@ -16,7 +19,6 @@
       justify-content: center; 
       align-items: center;
       gap: 40px; 
-       
     }
 
     .container img {
@@ -24,17 +26,15 @@
       height: 400px;
       object-fit: cover;
       border-radius: 10px;
-      box-shadow: 0 9px 12px rgba(0,0,0,0.4); 
+      box-shadow: 0 9px 12px rgba(0,0,0,0.4);
     }
 
     .texte {
       width: 200px; 
       text-align: justify;
-
     }
 
-
-.icone-retour {
+    .icone-retour {
       position: fixed;
       top: 15px;
       left: 15px;
@@ -45,44 +45,137 @@
       z-index: 1000;
     }
 
-    .icone-retour:hover {
-      transform: scale(1.2);
+    .icone-retour:hover { transform: scale(1.2); }
+
+    /* Le bouton magique */
+    .magic-btn{
+      position: relative;
+      display: inline-block;
+      padding: 14px 22px;
+      background:#222;
+      color:#fff;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      transition: transform 600ms cubic-bezier(.2,.9,.2,1), top 800ms ease, right 800ms ease, background 200ms ease;
+      z-index: 900;
     }
 
+    /* état après premier clic (s'échappe vers le haut) */
+    .magic-btn.escaped{
+      position: fixed;
+      top: 18px; /* en haut de la page */
+      right: 20px;
+      transform: translateY(-6px) scale(0.98);
+      background:#444;
+    }
 
+    /* survol paresseux */
+    .magic-btn:hover{ transform: translateY(-4px) scale(1.02); }
 
+    /* écran final */
+    .final-overlay{
+      position: fixed;
+      inset: 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:20px;
+      z-index: 2000;
+      background:#000;
+      color:var(--red);
+      font-size: clamp(20px, 4vw, 48px);
+      font-weight: 900;
+      text-align:center;
+    }
 
+    .final-overlay .go-btn{
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 8px 18px rgba(11,116,255,0.2);
+    }
+
+    /* cache le contenu lorsque l'overlay est actif */
+    .hidden{ visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 300ms ease; }
 
   </style>
 </head>
-
 <body>
-<a href="../index.html" class="icone-retour">🛡️</a>
+  <a href="../index.html" class="icone-retour">🛡️</a>
 
+  <div id="mainContent">
+    <div class="container">
+      <div class="texte">
+        <h2>Déscription</h2>
+        <p>
+          un sportif de haut niveau quelque peu douteux
+        </p>
+      </div>
 
-  <div class="container">
-    <div class="texte">
-      <h2>Déscription</h2>
-      <p>
-     un sportif de haut niveau quelque peu douteux
-      </p>
-    </div>
+      <img src="../zaki.jpg" alt="Walid" />
 
-    <img src="../zaki.jpg" alt="Walid" />
+      <div class="texte">
+        <h2>difficulté:</h2>
+        <p style="font-size: 24px;">⭐⭐⭐⭐⭐⭐</p>
 
-    <div class="texte">
-      <h2>difficulté:</h2>
-       
-    <p style="font-size: 24px;">⭐⭐⭐⭐⭐⭐</p>
+        <!-- Bouton demandé -->
+        <div style="margin-top:18px;">
+          <button id="docBtn" class="magic-btn">Clique ici si tu veux voir un documentaire</button>
+        </div>
 
-
+      </div>
     </div>
   </div>
 
+  <script>
+    (function(){
+      const btn = document.getElementById('docBtn');
+      const main = document.getElementById('mainContent');
+      let clicks = 0;
 
+      btn.addEventListener('click', (e) => {
+        clicks += 1;
 
+        if(clicks === 1){
+          // Premier clic : le bouton "s'échappe" vers le haut et change de texte
+          btn.classList.add('escaped');
+          btn.textContent = "Vaut mieux pas";
 
+          // Optionnel : petit déplacement latéral aléatoire pour donner l'effet d'échappement
+          const offset = (Math.random() > 0.5) ? 10 : -10;
+          btn.style.right = (20 + offset) + 'px';
 
+        } else if(clicks === 2){
+          // Deuxième clic : afficher l'écran final sombre
+          // on masque le contenu principal pour éviter les éléments visibles dessous
+          main.classList.add('hidden');
+
+          // créer overlay final
+          const overlay = document.createElement('div');
+          overlay.className = 'final-overlay';
+          overlay.innerHTML = `
+            <div>ok tu l'aura voulu</div>
+            <a class="go-btn" id="gotoVideo" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=8O7I5t8Qi2U">Regarder la vidéo</a>
+          `;
+
+          document.body.appendChild(overlay);
+
+          // pour s'assurer que le fond de page devient bien noir (au cas où)
+          document.body.style.background = '#000';
+        }
+      });
+
+      // sécurité : si l'utilisateur clique très vite plusieurs fois, on garde la logique simple
+      // on pourrait réinitialiser clicks si besoin; pour l'instant on ignore les clics >2
+
+    })();
+  </script>
 </body>
 </html>
-
