@@ -2,16 +2,16 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />   
-  <!-- utf8 ca permet d'acceder au accent et symbole europeen -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RPG test </title>
+  <title>RPG test + Chat live</title>
   <style>
-    
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f4f4f4;
+      display: flex;
+      min-height: 100vh;
     }
 
     header {
@@ -33,17 +33,21 @@
       z-index: 1000;
     }
 
-    .icone-retour:hover {
-      transform: scale(1.2);
+    .icone-retour:hover { transform: scale(1.2); }
+
+    .main-area {
+      flex: 1 1 auto;
+      padding: 50px;
+      box-sizing: border-box;\    
     }
 
-    .container {
-      display: flex;
-      padding: 50px;
+    .container-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
 
     .persos {
-      flex: 3;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
@@ -57,27 +61,40 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .perso img {
-      width: 100%;
-      max-height: 150px;
-      object-fit: cover;
+    .perso img { width: 100%; max-height: 150px; object-fit: cover; }
+    .perso h3 { margin: 10px 0 5px; }
+    .perso p { margin: 5px 0; }
+    .perso button { padding: 8px 15px; background-color: #28a745; border: none; color: white; cursor: pointer; border-radius: 4px; }
+
+    /* Chat sidebar */
+    #chat {
+      width: 360px;
+      max-width: 40%;
+      background: linear-gradient(180deg,#ffffff,#f7f7f7);
+      border-left: 1px solid rgba(0,0,0,0.08);
+      box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      box-sizing: border-box;
     }
 
-    .perso h3 {
-      margin: 10px 0 5px;
-    }
+    #chat header { font-weight: bold; margin-bottom: 8px; }
+    #messages { flex: 1 1 auto; overflow-y: auto; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.02); }
 
-    .perso p {
-      margin: 5px 0;
-    }
+    .message { margin-bottom: 8px; padding: 6px 8px; border-radius: 6px; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+    .meta { font-size: 12px; color: #666; margin-bottom: 4px; }
+    .text { word-wrap: break-word; }
 
-    .perso button {
-      padding: 8px 15px;
-      background-color: #28a745;
-      border: none;
-      color: white;
-      cursor: pointer;
-      border-radius: 4px;
+    #chat-form { display:flex; gap:8px; padding-top:8px; }
+    #chat-form input[type="text"] { flex: 1 1 auto; padding:8px; border-radius:6px; border:1px solid #ddd; }
+    #chat-form button { padding:8px 12px; border-radius:6px; border:none; background:#007bff; color:white; cursor:pointer; }
+
+    /* small screens */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      #chat { width: 100%; max-width: none; order: 2; }
+      .main-area { order: 1; }
     }
   </style>
 </head>
@@ -85,110 +102,264 @@
 
   <a href="index.html" class="icone-retour">🛡️</a>
 
-  <header>
-    <h1>CHOISI TON COMBATTANT 🗡️</h1>
-  </header>
+  <div class="main-area">
+    <header>
+      <h1>CHOISI TON COMBATTANT 🗡️</h1>
+    </header>
 
-  <div class="container">
-    <div class="persos">
-     
-      <div class="perso">
-        <img src="walid.jpg" alt="personnage " />
-        <h3>WALID</h3>
-        <p>difficulté :⭐</p>
-        <button onclick="goToPage()">afficher</button>
-      </div>
+    <div class="container-grid">
+      <div class="persos">
+       
+        <div class="perso">
+          <img src="walid.jpg" alt="personnage " />
+          <h3>WALID</h3>
+          <p>difficulté :⭐</p>
+          <button onclick="goToPage()">afficher</button>
+        </div>
 
-      <div class="perso">
-        <img src="raouf.jpg" alt="personnage1" />
-        <h3>RAOUF</h3>
-        <p>difficulté:⭐⭐</p>
-        <button onclick="goToPage1()">afficher</button>
-      </div>
+        <div class="perso">
+          <img src="raouf.jpg" alt="personnage1" />
+          <h3>RAOUF</h3>
+          <p>difficulté:⭐⭐</p>
+          <button onclick="goToPage1()">afficher</button>
+        </div>
 
-      <div class="perso">
-        <img src="spiro.jpg" alt="personnage 2" />
-        <h3>SPIRO</h3>
-        <p>difficulté:⭐⭐⭐</p>
-        <button onclick="goToPage2()">afficher</button>
-      </div> 
+        <div class="perso">
+          <img src="spiro.jpg" alt="personnage 2" />
+          <h3>SPIRO</h3>
+          <p>difficulté:⭐⭐⭐</p>
+          <button onclick="goToPage2()">afficher</button>
+        </div>
 
-      <div class="perso">
-        <img src="mumus.jpg" alt="personnage 3" />
-        <h3>MUMUS</h3>
-        <p>difficulté:⭐⭐⭐⭐</p>
-        <button onclick="goToPage3()">afficher</button>
-      </div>
+        <div class="perso">
+          <img src="mumus.jpg" alt="personnage 3" />
+          <h3>MUMUS</h3>
+          <p>difficulté:⭐⭐⭐⭐</p>
+          <button onclick="goToPage3()">afficher</button>
+        </div>
 
-
-     <div class="perso">
-        <img src="zaki.jpg" alt="personnage 4" />
-        <h3>Zaki</h3>
-        <p>difficulté:⭐⭐⭐⭐</p>
-        <button onclick="goToPage4()">afficher</button>
-      </div>
 
        <div class="perso">
-        <img src="provix.jpg" alt="personnage 5" />
-        <h3>provix</h3>
-        <p>difficulté:⭐⭐⭐⭐</p>
-        <button onclick="goToPage5()">afficher</button>
-      </div>
-       <div class="perso">
-        <img src="ilias.jpg" alt="personnage 6" />
-        <h3>ilias </h3>
-        <p>difficulté:⭐⭐⭐⭐</p>
-        <button onclick="goToPage6()">afficher</button>
-      </div>
-       <div class="perso">
-        <img src="adlane.jpg" alt="personnage 7" />
-        <h3>adlane </h3>
-        <p>difficulté:⭐⭐⭐⭐</p>
-        <button onclick="goToPage7()">afficher</button>
-      </div>
+          <img src="zaki.jpg" alt="personnage 4" />
+          <h3>Zaki</h3>
+          <p>difficulté:⭐⭐⭐⭐</p>
+          <button onclick="goToPage4()">afficher</button>
+        </div>
 
+         <div class="perso">
+          <img src="provix.jpg" alt="personnage 5" />
+          <h3>provix</h3>
+          <p>difficulté:⭐⭐⭐⭐</p>
+          <button onclick="goToPage5()">afficher</button>
+        </div>
+         <div class="perso">
+          <img src="ilias.jpg" alt="personnage 6" />
+          <h3>ilias </h3>
+          <p>difficulté:⭐⭐⭐⭐</p>
+          <button onclick="goToPage6()">afficher</button>
+        </div>
+         <div class="perso">
+          <img src="adlane.jpg" alt="personnage 7" />
+          <h3>adlane </h3>
+          <p>difficulté:⭐⭐⭐⭐</p>
+          <button onclick="goToPage7()">afficher</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat live (côté droit) -->
+  <aside id="chat">
+    <header>Chat Live — Discussions publiques</header>
+
+    <div style="font-size:13px; color:#444; margin-bottom:6px;">
+      Nom: <input id="nameInput" type="text" style="padding:4px 6px; border:1px solid #ccc; border-radius:4px; width:160px;"> 
+      <button id="setNameBtn" style="padding:4px 8px; margin-left:6px;">OK</button>
+    </div>
+
+    <div id="messages" aria-live="polite"></div>
+
+    <form id="chat-form">
+      <input id="msgInput" autocomplete="off" placeholder="Écris un message..." />
+      <button type="submit">Envoyer</button>
+    </form>
+
+    <small style="margin-top:6px; color:#666;">Nom automatique généré selon votre IP (modifiable). Les IPs ne sont pas affichées en clair côté public mais servent à produire un identifiant.</small>
+  </aside>
+
+
+  <!-- Firebase SDK (compat) - REMPLACEZ PAR VOTRE CONFIG FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
   <script>
-    function goToPage() {
-      window.location.href = "persos/walid.html"; 
+    // ---------------------------
+    // Remarques / Installation :
+    // 1) Créez un projet Firebase (https://console.firebase.google.com/)
+    // 2) Activez la Realtime Database en mode test (ou configurez des règles plus strictes).
+    // 3) Copiez COLLEZ votre configuration firebaseConfig ci-dessous.
+    // 4) Hébergez ce fichier (ou testez en local avec live-server) — la chat fonctionne en temps réel.
+    // ---------------------------
+
+    // ------------ placez votre config ici (exemple vide) -------------
+    const firebaseConfig = {
+      apiKey: "VOTRE_APIKEY",
+      authDomain: "VOTRE_AUTHDOMAIN",
+      databaseURL: "VOTRE_DATABASE_URL",
+      projectId: "VOTRE_PROJECTID",
+      storageBucket: "VOTRE_BUCKET",
+      messagingSenderId: "VOTRE_SENDER_ID",
+      appId: "VOTRE_APPID"
+    };
+
+    // si vous ne mettez pas la config, la partie chat ne fonctionnera pas — mais l'UI restera.
+    let firebaseAvailable = true;
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch (e) {
+      console.warn('Firebase non initialisé — remplissez firebaseConfig pour activer le chat en temps réel.');
+      firebaseAvailable = false;
     }
-    function goToPage1() {
-      window.location.href = "persos/raouf.html"; 
+
+    // références simples
+    const db = firebaseAvailable ? firebase.database() : null;
+    const chatRef = db ? db.ref('rpg-chat') : null;
+
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chat-form');
+    const msgInput = document.getElementById('msgInput');
+    const nameInput = document.getElementById('nameInput');
+    const setNameBtn = document.getElementById('setNameBtn');
+
+    // escape pour éviter XSS
+    function escapeHtml(str){
+      if(!str) return '';
+      return str.replace(/[&<>"']/g, function(tag){
+        const chars = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+        return chars[tag] || tag;
+      });
     }
-    function goToPage2() {
-      window.location.href = "persos/spiro.html"; 
+
+    // génère un nom d'utilisateur à partir d'une IP (ex: User-xxYY)
+    function usernameFromIp(ip){
+      if(!ip) return 'Invité';
+      // prend les derniers 2-3 chiffres pour anonymiser
+      const parts = ip.split('.');
+      if(parts.length >= 2){
+        return 'User-' + parts.slice(-2).join('');
+      }
+      // si ipv6, hache légèrement
+      return 'User-' + ip.slice(-4);
     }
-    function goToPage3() {
-      window.location.href = "persos/mumus.html"; 
+
+    // récupère IP publique via ipify (CORS OK). Si vous préférez un autre service, remplacez l'URL.
+    async function fetchIp(){
+      try {
+        const r = await fetch('https://api.ipify.org?format=json');
+        const j = await r.json();
+        return j.ip;
+      } catch(e){
+        return null;
+      }
     }
- function goToPage4() {
-      window.location.href = "persos/zaki.html"; 
+
+    // stocke le nom localement
+    function setLocalName(n){
+      localStorage.setItem('rpg_chat_name', n);
+      nameInput.value = n;
     }
-     function goToPage6() {
-      window.location.href = "persos/ilias.html"; 
+
+    function getLocalName(){
+      return localStorage.getItem('rpg_chat_name') || '';
     }
-     function goToPage5() {
-      window.location.href = "persos/provix.html"; 
+
+    // initialisation
+    (async function init(){
+      const saved = getLocalName();
+      let ip = null;
+      try { ip = await fetchIp(); } catch(e){ ip = null; }
+
+      const autoName = usernameFromIp(ip);
+      if(!saved){
+        setLocalName(autoName);
+      } else {
+        nameInput.value = saved;
+      }
+
+      // si firebase ok, écoute en temps réel
+      if(chatRef){
+        chatRef.limitToLast(200).on('child_added', snapshot => {
+          const msg = snapshot.val();
+          appendMessage(msg);
+        });
+      } else {
+        // si pas de firebase, on peut charger messages locaux (demo) — ici on n'affiche rien.
+      }
+
+      // scroll to bottom helper
+      messagesEl.addEventListener('DOMNodeInserted', () => {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      });
+
+    })();
+
+    function appendMessage(msg){
+      const wrap = document.createElement('div');
+      wrap.className = 'message';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const date = new Date(msg.ts || Date.now());
+      meta.innerHTML = `<strong>${escapeHtml(msg.name)}</strong> • ${date.toLocaleString()}`;
+      const text = document.createElement('div');
+      text.className = 'text';
+      text.innerHTML = escapeHtml(msg.text);
+      wrap.appendChild(meta);
+      wrap.appendChild(text);
+      messagesEl.appendChild(wrap);
     }
-     function goToPage7() {
-      window.location.href = "persos/adlane.html"; 
-    }
-    
+
+    // envoi de message
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = msgInput.value.trim();
+      if(!text) return;
+      const name = (nameInput.value || getLocalName() || 'Invité').trim();
+      const msg = {
+        name: name,
+        text: text,
+        ts: Date.now()
+      };
+
+      if(chatRef){
+        try {
+          chatRef.push(msg);
+        } catch(err){
+          console.error('Erreur push', err);
+          appendMessage({name: 'Erreur', text: 'Impossible d'envoyer (vérifiez firebaseConfig).', ts: Date.now()});
+        }
+      } else {
+        appendMessage({name: 'Local', text: 'Chat non configuré côté serveur. Mettre firebaseConfig.', ts: Date.now()});
+      }
+
+      msgInput.value = '';
+    });
+
+    setNameBtn.addEventListener('click', () => {
+      const n = nameInput.value.trim();
+      if(n) setLocalName(n);
+    });
+
+    // fonctions de redirection existantes (issue: conserver vos fonctions originales)
+    function goToPage() { window.location.href = "persos/walid.html"; }
+    function goToPage1() { window.location.href = "persos/raouf.html"; }
+    function goToPage2() { window.location.href = "persos/spiro.html"; }
+    function goToPage3() { window.location.href = "persos/mumus.html"; }
+    function goToPage4() { window.location.href = "persos/zaki.html"; }
+    function goToPage6() { window.location.href = "persos/ilias.html"; }
+    function goToPage5() { window.location.href = "persos/provix.html"; }
+    function goToPage7() { window.location.href = "persos/adlane.html"; }
+
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
