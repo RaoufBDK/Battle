@@ -35,7 +35,7 @@
     .wf-dot{ width:10px; height:10px; border-radius:50%; background:#ddd; }
     .wf-dot.active{ background:var(--accent); box-shadow:0 4px 10px rgba(11,116,255,0.18); }
 
-    /* reuse Simon game styles inside slide */
+
     .game-area{ width:320px; height:320px; position: relative; border-radius:50%; box-shadow: 0 12px 30px rgba(0,0,0,0.18); overflow: visible; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; margin:auto; }
     .segment{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition: filter 180ms ease, transform 160ms ease, box-shadow 180ms ease; font-weight:700; color:rgba(255,255,255,0.95); font-family:inherit; font-size:18px; }
     .seg-0{ background: #1abc9c; border-top-left-radius: 100% 100%; }
@@ -52,7 +52,6 @@
     .rotate-anim{ animation: spin 2.6s linear infinite; }
     @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
 
-    /* placeholder styles for upcoming Walidfares */
     .placeholder{ min-height:280px; display:flex; align-items:center; justify-content:center; gap:18px; flex-direction:column; color:#333; }
     .kbd{ font-weight:900; background:#111; color:#fff; padding:6px 10px; border-radius:6px; }
 
@@ -76,7 +75,6 @@
     </div>
   </div>
 
-  <!-- WALIDFARE SECTION (carousel of multiple mini-captchas / games) -->
   <section class="walidfare-section" aria-label="Walidfare — mini jeux">
     <div class="wf-header">
       <div class="wf-title">Walidfare — Choisis un mini-jeu</div>
@@ -90,13 +88,13 @@
       </div>
     </div>
 
-    <!-- Slide 1 : Simon-like (Walidfare 1) -->
+  
     <div id="wf1" class="wf-slide active" data-index="0">
       <h3>Walidfare 1 — Simon-like</h3>
       <p>Le jeu déjà réalisé: répète la séquence de couleurs en 7 étapes. (Démarrer ci-dessous)</p>
 
       <div style="display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;">
-        <!-- Simon game area (copied and scoped) -->
+    
         <div>
           <div class="game-area" id="gameArea1" role="application" aria-label="Walidfare 1 Simon">
             <div class="segment seg-0" data-index="0" tabindex="0">1</div>
@@ -122,9 +120,9 @@
   </section>
 
   <script>
-  // WALIDFARE carousel logic + initialize Walidfare 1 (simon) as before
+
   (function(){
-    // Carousel
+
     const slides = Array.from(document.querySelectorAll('.wf-slide'));
     const indicators = document.getElementById('wfIndicators');
     let current = 0;
@@ -154,7 +152,7 @@
 
     renderIndicators(); showSlide(0);
 
-    /* ----------------- Walidfare 1 (Simon) implementation (scoped ids) ----------------- */
+    
     const TOTAL_STEPS = 7;
     const gameArea = document.getElementById('gameArea1');
     const segments = Array.from(gameArea.querySelectorAll('.segment'));
@@ -187,11 +185,12 @@
     resetBtn.addEventListener('click', resetGame);
     resetGame();
 
-    // expose small helper to jump to a slide programmatically if needed
+   
     window.showWalidfare = showSlide;
 
   })();
   </script>
 </body>
 </html>
+
 
