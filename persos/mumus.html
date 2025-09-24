@@ -15,7 +15,7 @@
       justify-content: center; 
       align-items: center;
       gap: 40px; 
-      flex-wrap: wrap;
+       
     }
 
     .container img {
@@ -29,10 +29,14 @@
     .texte {
       width: 200px; 
       text-align: justify;
+
     }
 
-    .icone-retour, .icone-muscle {
+
+.icone-retour {
       position: fixed;
+      top: 15px;
+      left: 15px;
       font-size: 30px;
       text-decoration: none;
       cursor: pointer;
@@ -40,55 +44,44 @@
       z-index: 1000;
     }
 
-    .icone-retour {
-      top: 15px;
-      left: 15px;
-    }
-
-    .icone-muscle {
-      bottom: 15px;
-      right: 15px;
-      font-size: 40px; /* taille initiale */
-    }
-
-    .icone-retour:hover, .icone-muscle:hover {
+    .icone-retour:hover {
       transform: scale(1.2);
     }
+
+
+
+
+
   </style>
 </head>
 
 <body>
-  <!-- Icône retour -->
-  <a href="../index.html" class="icone-retour">🛡️</a>
+<a href="../index.html" class="icone-retour">🛡️</a>
+
 
   <div class="container">
     <div class="texte">
-      <h2>Description</h2>
+      <h2>Déscription</h2>
       <p>
-        tu le vois ?<br>
-        tu le vois plus
+   tombe et mange
+      
       </p>
     </div>
 
     <img src="../mumus.jpg" alt="mumus" />
 
     <div class="texte">
-      <h2>Difficulté :</h2>
-      <p style="font-size: 24px;">⭐⭐⭐</p>
+      <h2>difficulté:</h2>
+       
+    <p style="font-size: 24px;">⭐⭐⭐⭐</p>
+
+
     </div>
   </div>
 
-  <!-- Icône muscle -->
-  <span class="icone-muscle" id="muscle">💪</span>
 
-  <script>
-    const muscle = document.getElementById("muscle");
-    let taille = 40; // taille initiale
 
-    muscle.addEventListener("click", () => {
-      taille += 10; // +10px à chaque clic
-      muscle.style.fontSize = taille + "px";
-    });
-  </script>
+
+
 </body>
 </html>
