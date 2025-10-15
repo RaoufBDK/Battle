@@ -106,7 +106,7 @@
       color: #e6eef8;
     }
 
-    /* Conteneur simple */
+
     .wrap{
       text-align:center;
       padding:28px;
@@ -119,7 +119,6 @@
     h1{ font-size:20px; margin:0 0 14px; letter-spacing:0.2px; }
     p{ margin:0 0 18px; color: #c6d2e6; font-size:14px }
 
-    /* Le "logo" cliquable */
     .logo-btn{
       display:inline-flex;
       align-items:center;
@@ -156,7 +155,7 @@
       filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
     }
 
-    /* Modal */
+
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -208,7 +207,6 @@
       color:#a9b7d6;
     }
 
-    /* Responsive small screens: make modal full height */
     @media (max-width:520px){
       .modal{ width:100%; height:calc(100vh - 40px); aspect-ratio: auto; border-radius:8px; }
     }
@@ -219,7 +217,7 @@
     <h1 id="main-title">ya moyen tu me passe 100da promis nreje3halek🙏🙏  </h1>
     <p>clique ici stp fais pas ta pute .</p>
 
-    <!-- Bouton/logo : remplace l'URL YouTube dans data-youtube -->
+   
     <button
       class="logo-btn"
       id="play-btn"
@@ -235,34 +233,33 @@
     <div class="caption">
   </div>
 
-  <!-- Modal / lecteur -->
+
   <div class="modal-backdrop" id="backdrop" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="modal" id="player-modal">
       <button class="close-btn" id="close" aria-label="Fermer la vidéo">✕</button>
-      <!-- iframe src ajouté dynamiquement pour éviter de charger la vidéo avant clic -->
+  
       <iframe id="yt-frame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
     </div>
   </div>
 
   <script>
-    // Récupère éléments
+ 
     const btn = document.getElementById('play-btn');
     const backdrop = document.getElementById('backdrop');
     const iframe = document.getElementById('yt-frame');
     const closeBtn = document.getElementById('close');
 
-    // Extraction de l'ID de vidéo YouTube depuis plusieurs formats d'URL
-    // Renvoie l'ID (11+ caractères) ou null si introuvable
+ 
     function extractYouTubeID(url){
       if(!url) return null;
       try {
-        // Si passé directement un ID
+   
         if(/^[A-Za-z0-9_-]{11,}$/.test(url.trim())) return url.trim();
 
-        // Normalise
+   
         const u = url.trim();
 
-        // Patterns courants
+   
         const patterns = [
           /(?:youtube\.com\/watch\?v=|youtube\.com\/watch\?.+&v=)([A-Za-z0-9_-]{11,})/,
           /youtube\.com\/embed\/([A-Za-z0-9_-]{11,})/,
@@ -273,42 +270,42 @@
           const m = u.match(p);
           if(m && m[1]) return m[1];
         }
-        // Attempt: query param v
+       
         const urlObj = new URL(u, location.href);
         const v = urlObj.searchParams.get('v');
         if(v && /^[A-Za-z0-9_-]{11,}$/.test(v)) return v;
 
       } catch(e){
-        // ignore
+    
       }
       return null;
     }
 
-    // Ouvrir la modale et charger l'iframe
+  
     function openModal(youtubeUrl){
       const id = extractYouTubeID(youtubeUrl);
       if(!id){
         alert("URL YouTube invalide ou identifiant introuvable. Vérifie le champ data-youtube du bouton.");
         return;
       }
-      // URL d'embed avec autoplay
+      
       const embed = `https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
       iframe.src = embed;
       backdrop.classList.add('active');
       backdrop.setAttribute('aria-hidden', 'false');
-      // focus utile pour accessibilité
+    
       closeBtn.focus();
     }
 
     function closeModal(){
       backdrop.classList.remove('active');
       backdrop.setAttribute('aria-hidden', 'true');
-      // stoppe la vidéo en retirant la src
+      
       iframe.src = '';
       btn.focus();
     }
 
-    // Événements
+
     btn.addEventListener('click', () => {
       const url = btn.getAttribute('data-youtube') || '';
       openModal(url);
@@ -316,18 +313,16 @@
 
     closeBtn.addEventListener('click', closeModal);
 
-    // Fermer si on clique en dehors de la modale (sur le backdrop)
+   
     backdrop.addEventListener('click', (e) => {
       if(e.target === backdrop) closeModal();
     });
 
-    // Échap pour fermer
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Escape' && backdrop.classList.contains('active')) closeModal();
     });
 
-    // Exemple : permettre de changer la vidéo dynamiquement depuis la console
-    // window.setYouTubeOnButton = (url) => btn.setAttribute('data-youtube', url);
+   
   </script>
 </body>
 </html>
@@ -338,6 +333,7 @@
 
 </body>
 </html>
+
 
 
 
