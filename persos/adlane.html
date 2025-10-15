@@ -47,7 +47,7 @@
     .icone-muscle {
       bottom: 15px;
       right: 15px;
-      font-size: 40px; /* taille de départ */
+      font-size: 40px; 
     }
 
     .icone-retour:hover, .icone-muscle:hover {
@@ -56,7 +56,7 @@
   </style>
 </head>
 <body>
-  <!-- Icône de retour -->
+
   <a href="../index.html" class="icone-retour">🛡️</a>
 
   <div class="container">
@@ -73,15 +73,15 @@
     </div>
   </div>
 
-  <!-- Icône muscle -->
+ 
   <span class="icone-muscle" id="muscle">💪</span>
 
   <script>
     const muscle = document.getElementById("muscle");
-    let taille = 40; // taille initiale en pixels
+    let taille = 40; 
 
     muscle.addEventListener("click", () => {
-      taille += 10; // augmente la taille de 10px à chaque clic
+      taille += 10; 
       muscle.style.fontSize = taille + "px";
     });
   </script>
